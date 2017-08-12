@@ -1,0 +1,18 @@
+<nav class="navbar navbar-default">
+    <div class="navbar-header">
+      <a routerLink = "/" class="navbar-brand">Q-Paper</a>
+      <button type="button" class="navbar-toggle collapsed" (click)="toggleNavMenu()">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <div class="collapse navbar-collapse" [ngClass]="{'in': !navMenuCollapsed}">
+      <ul class="nav navbar-nav">
+        <li routerLinkActive = "active" (click)="toggleNavMenu()"><a routerLink = "/papers">Papers</a></li>
+        <li routerLinkActive = "active" (click)="toggleNavMenu()"><a routerLink = "/questions">Questions</a></li>
+        <li routerLinkActive = "active" (click)="toggleNavMenu()"><a routerLink = "/admin">Admin</a></li>
+      </ul>
+    </div>
+</nav>

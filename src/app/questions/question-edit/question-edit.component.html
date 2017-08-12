@@ -1,0 +1,63 @@
+<h3>Question Editor</h3>
+<form (ngSubmit)="formSubmit(f)" #f="ngForm">
+  <div class="row">
+    <div class="col-xs-3">
+      <md-input-container>
+        <input type="text" mdInput placeholder="ID" value="{{question.id}}" disabled>
+      </md-input-container>
+    </div>
+    <div class="col-xs-6">
+      <md-input-container>
+        <input type="text" mdInput placeholder="Created by" value="Fred Liebenberg" disabled>
+      </md-input-container>
+    </div>
+    <div class="col-xs-3">
+      <md-input-container>
+        <input type="text" mdInput placeholder="Created on" value="02/08/2017" disabled>
+      </md-input-container>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3"></div>
+    <div class="col-xs-6">
+      <md-input-container>
+        <input type="text" mdInput placeholder="Last edited by" value="Debbie Liebenberg" disabled>
+      </md-input-container>
+    </div>
+    <div class="col-xs-3">
+      <md-input-container>
+        <input type="text" mdInput placeholder="Last edited on" value="02/08/2017" disabled>
+      </md-input-container>
+    </div>
+  </div>
+  <hr>
+  <md-input-container class="full-width">
+    <input
+      type="text" mdInput
+      placeholder="Description"
+      [ngModel] = "question.description"
+      name="description"
+      >
+  </md-input-container>
+  <md-input-container class="full-width">
+    <textarea
+      mdInput
+      placeholder="Question"
+      rows="3"
+      [ngModel] = "question.questionText"
+      name="questionText"
+      >
+    </textarea>
+  </md-input-container>
+  <md-input-container class="full-width">
+    <textarea
+      mdInput
+      placeholder="Answer"
+      rows="3"
+      [ngModel] = "question.answerText"
+      name="answerText"
+      >
+    </textarea>
+  </md-input-container>
+  <button md-button type="submit">Save</button>
+</form>
