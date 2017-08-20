@@ -1,3 +1,8 @@
 .full-width {
   width: 100%;
 }
+
+:host ::ng-deep .question-var {
+  color: red;
+  background-color: yellow;
+}

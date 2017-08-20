@@ -11,7 +11,7 @@ export class QuestionsService {
 
   constructor () {
     this.addQuestion(new Question('1', 'Grade 1', 'Maths', 'Basic math question', 'What is 1+1?', 'Answer is 2'));
-    this.addQuestion(new Question('2', 'Grade 1', 'English', 'First English question', 'What is a verb?', 'A verb is a \'do\' word.'));
+    this.addQuestion(new Question('2', 'Grade 1', 'English', 'First English question', 'What is a {verb}?', 'A verb is a \'do\' word.'));
     this.addQuestion(new Question('3', 'Grade 4', 'Geography', 'This is a much longer geography question', 'What was the ancient capital of Thailand called?', 'Suhkothai'));
   }
 
@@ -42,5 +42,11 @@ export class QuestionsService {
     } else {
       return false;
     }
+  }
+
+  findVar(inString :string) : {startPos : number, endPos: number} {
+    var startPos = inString.search(/{/);
+    var endPos = inString.search(/}/);
+    return {startPos, endPos};
   }
 }

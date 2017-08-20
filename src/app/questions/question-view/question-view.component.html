@@ -12,7 +12,7 @@
       <md-card-content>
         <md-card style="padding: 5px">
           <h4>Question:</h4>
-          <p>{{question.questionText}}</p>
+          <p [innerHtml] = "question.questionText | render | safeHtml"></p>
         </md-card>
         <hr style="margin: 5px">
         <md-card style="padding: 5px">

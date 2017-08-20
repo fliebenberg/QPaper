@@ -18,6 +18,8 @@ import { QuestionExistsGuard } from './question-exists.guard';
 import { QuestionListComponent } from './questions/question-list/question-list.component';
 import { QuestionListItemComponent } from './questions/question-list/question-list-item/question-list-item.component';
 import { QuestionViewComponent } from './questions/question-view/question-view.component';
+import { RenderQAPipe } from "./questions/render-qa.pipe";
+import { SafeHtmlPipe } from "./shared/safe-html.pipe";
 import { SubjectSelectorComponent } from './subject-selector/subject-selector.component';
 
 @NgModule({
@@ -33,6 +35,8 @@ import { SubjectSelectorComponent } from './subject-selector/subject-selector.co
     QuestionListComponent,
     QuestionListItemComponent,
     QuestionViewComponent,
+    RenderQAPipe,
+    SafeHtmlPipe,
     SubjectSelectorComponent
   ],
   imports: [

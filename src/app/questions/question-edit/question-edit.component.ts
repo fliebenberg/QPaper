@@ -43,8 +43,8 @@ export class QuestionEditComponent implements OnInit {
   formSubmit(form: NgForm){
     this.question.description = form.value.description;
     this.question.questionText = form.value.questionText;
+    console.log(this.question.questionText);
     this.question.answerText = form.value.answerText;
-
     this.questionsService.replaceQuestion(this.index, this.question);
   }
 

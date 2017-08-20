@@ -13,10 +13,9 @@ import { NotFoundComponent } from "./not-found/not-found.component";
 const AppRoutes: Routes = [
   {path: "", redirectTo: "questions", pathMatch: "full"},
   {path: "papers", component: PapersComponent},
-  {path: "questions", component: QuestionsComponent, children: [
-    {path: ":index", canActivate: [QuestionExistsGuard], component: QuestionViewComponent},
-    {path: ":index/edit", component: QuestionEditComponent}
-  ]},
+  {path: "questions", component: QuestionsComponent},
+  {path: "questions/:index", canActivate: [QuestionExistsGuard], component: QuestionViewComponent},
+  {path: "questions/:index/edit", component: QuestionEditComponent},
   {path: "admin", component: AdminComponent},
   {path: "not-found", component: NotFoundComponent},
 //  {path: "**", redirectTo: "not-found"}

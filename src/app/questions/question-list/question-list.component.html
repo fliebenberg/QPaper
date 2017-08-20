@@ -5,19 +5,19 @@
 <div class="container" id="full-list">
   <div class="col-xs-12">
     <!-- <button class = "btn btn-sm btn-success" (click) = "onAddQuestion()"> -->
-    <button type="button" md-raised-button (click) = "onAddQuestion()">
+    <button type="button" color="primary" md-raised-button (click) = "onAddQuestion()">
       NEW
     </button>
     <div class="pull-right">
-      <md-select placeholder="Grade">
-        <md-option>Grade R</md-option>
-        <md-option>Grade 1</md-option>
-        <md-option>Grade 2</md-option>
+      <md-select color="secondary" placeholder="Grade">
+        <md-option value="Grade R">Grade R</md-option>
+        <md-option value="Grade 1">Grade 1</md-option>
+        <md-option value="Grade 2">Grade 2</md-option>
       </md-select>
       <md-select placeholder="Subject">
-        <md-option>English</md-option>
-        <md-option>Afrikaans</md-option>
-        <md-option>Maths</md-option>
+        <md-option value="English">English</md-option>
+        <md-option value="Afrikaans">Afrikaans</md-option>
+        <md-option value="Maths">Maths</md-option>
       </md-select>
       <!-- <button class="btn btn-sm btn-default">
         Filter: Grade
@@ -35,7 +35,6 @@
     <!-- <div class="list-group"> -->
       <app-question-list-item
         *ngFor="let question of questions; let i = index"
-
         [question] = "question"
         [index] = "i">
       </app-question-list-item>
