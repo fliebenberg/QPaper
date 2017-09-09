@@ -1,46 +1,25 @@
-<div class="container" id="list-bar">
-  <p>{{questions[questionsService.currentQuestion]}}</p>
+<div fxLayout="row" id="filter-bar">
+  <md-select color="secondary" placeholder="Grade">
+    <md-option value="Grade R">Grade R</md-option>
+    <md-option value="Grade 1">Grade 1</md-option>
+    <md-option value="Grade 2">Grade 2</md-option>
+  </md-select>
+  <md-select placeholder="Subject">
+    <md-option value="English">English</md-option>
+    <md-option value="Afrikaans">Afrikaans</md-option>
+    <md-option value="Maths">Maths</md-option>
+  </md-select>
 </div>
-<hr>
-<div class="container" id="full-list">
-  <div class="col-xs-12">
-    <!-- <button class = "btn btn-sm btn-success" (click) = "onAddQuestion()"> -->
-    <button type="button" color="primary" md-raised-button (click) = "onAddQuestion()">
-      NEW
-    </button>
-    <div class="pull-right">
-      <md-select color="secondary" placeholder="Grade">
-        <md-option value="Grade R">Grade R</md-option>
-        <md-option value="Grade 1">Grade 1</md-option>
-        <md-option value="Grade 2">Grade 2</md-option>
-      </md-select>
-      <md-select placeholder="Subject">
-        <md-option value="English">English</md-option>
-        <md-option value="Afrikaans">Afrikaans</md-option>
-        <md-option value="Maths">Maths</md-option>
-      </md-select>
-      <!-- <button class="btn btn-sm btn-default">
-        Filter: Grade
-        <span class="caret"></span>
-      </button>
-      <button class="btn btn-sm btn-default">
-        Filter: Subject
-        <span class="caret"></span>
-      </button> -->
-    </div>
-  </div>
-</div>
-<div class="row container">
+<div fxLayout="column" id="question-list">
   <md-nav-list>
-    <!-- <div class="list-group"> -->
-      <app-question-list-item
-        *ngFor="let question of questions; let i = index"
-        [question] = "question"
-        [index] = "i">
-      </app-question-list-item>
-    <!-- </div> -->
+    <app-question-list-item
+      *ngFor="let question of (questions | async); let i = index"
+      [question] = "question"
+      [index] = "i">
+    </app-question-list-item>
   </md-nav-list>
 
+  <button type="button" color="primary" md-raised-button (click) = "onAddQuestion()">
+    NEW
+  </button>
 </div>
-
-<!-- class="list-group-item" style="padding: 0px" -->

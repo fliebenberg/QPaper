@@ -1,7 +1,8 @@
 <!-- <li class="row list-group-item"> -->
   <a
-    [routerLink] = "[index]"
     md-list-item
+    [routerLink] = "[question.id]"
+    (click) = "questionSelected()"
     routerLinkActive = "active-link"
     >
     {{question.description}}

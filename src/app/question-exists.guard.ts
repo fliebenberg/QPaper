@@ -9,7 +9,10 @@ export class QuestionExistsGuard implements CanActivate {
   private param: string;
   // private path: string;
 
-  constructor(private questionsService: QuestionsService, private router: Router){};
+  constructor(
+    private questionsService: QuestionsService,
+    private router: Router
+  ){};
 
   canActivate(route: ActivatedRouteSnapshot,
               state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
@@ -19,7 +22,7 @@ export class QuestionExistsGuard implements CanActivate {
     //   this.path = this.path + partPath.url.toString() + "/";
     // };
     // console.log(this.path);
-    if (isNaN(+this.param) || +this.param >= this.questionsService.getQuestions().length) {
+    if (isNaN(+this.param) || +this.param >= this.questionsService.getQuestionsSnapshot().length) {
       //console.log("Problem with question Param");
       this.router.navigate(['/questions']);
       return false;

@@ -1,8 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from "@angular/forms";
+import { StoreModule } from "@ngrx/store";
 
 import { MyNgMaterialModule } from "./ng-material.module";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 import { AdminComponent } from './admin/admin.component';
 import { AppComponent } from './app.component';
@@ -21,6 +23,9 @@ import { QuestionViewComponent } from './questions/question-view/question-view.c
 import { RenderQAPipe } from "./questions/render-qa.pipe";
 import { SafeHtmlPipe } from "./shared/safe-html.pipe";
 import { SubjectSelectorComponent } from './subject-selector/subject-selector.component';
+
+import { questionsReducer } from "./store/questions.reducer";
+import { selectedQuestionReducer } from "./store/selected-question.reducer";
 
 @NgModule({
   declarations: [
@@ -43,9 +48,13 @@ import { SubjectSelectorComponent } from './subject-selector/subject-selector.co
     AppRoutingModule,
     BrowserModule,
     MyNgMaterialModule,
-    FormsModule
+    FlexLayoutModule,
+    FormsModule,
+    StoreModule.forRoot({questions: questionsReducer, selectedQuestion: selectedQuestionReducer})
   ],
-  providers: [QuestionsService, QuestionExistsGuard],
+  providers: [
+    QuestionsService, 
+    QuestionExistsGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

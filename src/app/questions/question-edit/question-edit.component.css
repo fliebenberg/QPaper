@@ -3,6 +3,6 @@
 }
 
 :host ::ng-deep .question-var {
-  color: red;
+  color: blue;
   background-color: yellow;
 }

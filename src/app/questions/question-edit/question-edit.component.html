@@ -1,40 +1,49 @@
-<h3>Edit Question</h3>
+<div layout="row">
+  <h3 style="margin-top: 5px">{{questionCopy.description}}</h3>
+  <i
+    class="glyphicon"
+    [ngClass] = "showMetaData ? 'glyphicon-eye-close' : 'glyphicon-eye-open'"
+    (click) = "onToggleMetaData()">
+  </i>
+</div>
 <form (ngSubmit)="formSubmit(f)" #f="ngForm">
-  <div class="row">
-    <div class="col-xs-3">
-      <md-input-container>
-        <input type="text" mdInput placeholder="ID" value="{{question.id}}" disabled>
-      </md-input-container>
+  <md-card *ngIf = "showMetaData">
+    <div class="row">
+      <div class="col-xs-3">
+        <md-input-container>
+          <input type="text" mdInput placeholder="ID" value="{{questionCopy.id}}" disabled>
+        </md-input-container>
+      </div>
+      <div class="col-xs-6">
+        <md-input-container>
+          <input type="text" mdInput placeholder="Created by" value="Fred Liebenberg" disabled>
+        </md-input-container>
+      </div>
+      <div class="col-xs-3">
+        <md-input-container>
+          <input type="text" mdInput placeholder="Created on" value="02/08/2017" disabled>
+        </md-input-container>
+      </div>
     </div>
-    <div class="col-xs-6">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Created by" value="Fred Liebenberg" disabled>
-      </md-input-container>
+    <div class="row">
+      <div class="col-xs-3"></div>
+      <div class="col-xs-6">
+        <md-input-container>
+          <input type="text" mdInput placeholder="Last edited by" value="Debbie Liebenberg" disabled>
+        </md-input-container>
+      </div>
+      <div class="col-xs-3">
+        <md-input-container>
+          <input type="text" mdInput placeholder="Last edited on" value="02/08/2017" disabled>
+        </md-input-container>
+      </div>
     </div>
-    <div class="col-xs-3">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Created on" value="02/08/2017" disabled>
-      </md-input-container>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-3"></div>
-    <div class="col-xs-6">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Last edited by" value="Debbie Liebenberg" disabled>
-      </md-input-container>
-    </div>
-    <div class="col-xs-3">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Last edited on" value="02/08/2017" disabled>
-      </md-input-container>
-    </div>
-  </div>
+  </md-card>
   <md-input-container class="full-width">
     <input
       type="text" mdInput
       placeholder="Description"
-      [ngModel] = "question.description"
+      [(ngModel)] = "questionCopy.description"
       name="description"
       >
   </md-input-container>
@@ -43,24 +52,24 @@
       mdInput md-autosize minRows="1"
       placeholder="Question"
       rows="3"
-      [(ngModel)] = "question.questionText"
+      [(ngModel)] = "questionCopy.questionText"
       name="questionText"
       >
     </textarea>
   </md-input-container>
   <h6>Question Preview</h6>
-  <pre [innerHTML] = "question.questionText | render | safeHtml"></pre>
+  <pre [innerHTML] = "questionCopy.questionText | render | safeHtml"></pre>
   <md-input-container class="full-width">
     <textarea
       mdInput md-autosize minRows="1"
       placeholder="Answer"
       rows="3"
-      [ngModel] = "question.answerText"
+      [(ngModel)] = "questionCopy.answerText"
       name="answerText"
       >
     </textarea>
   </md-input-container>
   <h6>Answer Preview</h6>
-  <pre [innerHTML] = "question.answerText"></pre>
+  <pre [innerHTML] = "questionCopy.answerText | render | safeHtml"></pre>
   <button md-button type="submit">Save</button>
 </form>

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import { Subscription } from "rxjs/subscription";
 import { MdButtonModule } from "@angular/material";
 
-import { Question } from "../question.model";
+import { Question } from "../../store/question.model";
 import { QuestionsService } from "../questions.service";
 
 @Component({
@@ -13,45 +13,62 @@ import { QuestionsService } from "../questions.service";
   styleUrls: ['./question-edit.component.css']
 })
 export class QuestionEditComponent implements OnInit {
-  index: number;
-  question : Question;
-  myQuestionChangeSub : Subscription;
+  id: string;
+  questionCopy : Question;
+  questionSubscription : Subscription;
+  showMetaData = false;
+  // myQuestionChangeSub : Subscription;
 
   constructor(private route: ActivatedRoute,
               private router : Router,
-              private questionsService : QuestionsService) {
+              private questionsService : QuestionsService
+            ) {
   }
 
   ngOnInit() {
-    this.index = +this.route.snapshot.params['index'];
-    this.question = this.questionsService.getQuestion(this.index);
-    console.log(this.question);
-    this.route.params
+    console.log("question-edit.component initialising...")
+    this.id = this.route.snapshot.params['id'];
+    console.log("route id: "+this.id);
+    if (this.questionsService.setSelectedQuestion(this.id)) {
+      this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
+      // subscribe to monitor when params change and load new question
+      this.route.params
       .subscribe(
         (params: Params) => {
-          this.index = +params['index'];
-          this.question = this.questionsService.getQuestion(this.index);
+          console.log("Subscribing to params");
+          this.id = params['id'];
+          if (this.questionsService.setSelectedQuestion(this.id)) {
+            this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
+          } else {
+            console.log("Invalid id in params :" + this.id);
+            this.router.navigate(["/questions"]);
+          };
         }
       );
-    this.myQuestionChangeSub = this.questionsService.questionsChanged.subscribe(
-      (questions : Question[]) => {
-        this.router.navigate(['/questions']);
-      }
-    );
+
+      console.log("Question Edit Init: ");
+      console.log(this.questionCopy);
+    } else {
+      console.log("could not find question with id: "+ this.id);
+      this.router.navigate(["/questions"]);
+    };
   }
 
   formSubmit(form: NgForm){
-    this.question.description = form.value.description;
-    this.question.questionText = form.value.questionText;
-    console.log(this.question.questionText);
-    this.question.answerText = form.value.answerText;
-    this.questionsService.replaceQuestion(this.index, this.question);
+    this.questionCopy.description = form.value.description;
+    this.questionCopy.questionText = form.value.questionText;
+    this.questionCopy.answerText = form.value.answerText;
+    this.questionsService.replaceQuestion(this.questionCopy);
+    this.router.navigate(["/questions",this.questionCopy.id]);
   }
 
   onDelete(index: number) {
 
-    this.questionsService.removeQuestion(this.index);
-    console.log("Question "+this.index+" deleted.");
+    // this.questionsService.removeQuestion(this.index);
+    console.log("Question "+this.id+" deleted.");
   }
 
+  onToggleMetaData() {
+    this.showMetaData = !this.showMetaData;
+  }
 }

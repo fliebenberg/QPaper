@@ -1,7 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input , Output, EventEmitter} from '@angular/core';
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../store/app.state";
+import * as SQActions from "../../../store/selected-question.actions";
 import { Router } from "@angular/router";
 
-import { Question } from "../../question.model";
+import { Question } from "../../../store/question.model";
 import { QuestionsService } from "../../questions.service";
 
 @Component({
@@ -13,9 +16,17 @@ export class QuestionListItemComponent implements OnInit {
   @Input() question: Question;
   @Input() index: number;
 
-  constructor(private questionsService : QuestionsService, private router: Router) { }
+  constructor(
+    private questionsService : QuestionsService,
+    private store: Store<AppState>,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+  }
+
+  questionSelected(){
+    this.questionsService.setSelectedQuestion(this.question.id);
   }
 
   onEdit() {
@@ -23,7 +34,7 @@ export class QuestionListItemComponent implements OnInit {
   }
   onDelete() {
     console.log("Question " + this.index + " was deleted!");
-    this.questionsService.removeQuestion(this.index);
+    // this.questionsService.removeQuestion(this.index);
   }
 
 }
