@@ -34,15 +34,15 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
     if (this.questionsService.setSelectedQuestion(this.id)) {
       this.question$ = this.questionsService.getSelectedQuestion();
       // subscribe to monitor when params change and load new question
-      this.route.params
-      .subscribe(
-        (params: Params) => {
-          console.log("Subscribing to params");
-          this.id = params['id'];
-          this.questionsService.setSelectedQuestion(this.id);
-          this.question$ = this.questionsService.getSelectedQuestion();
-        }
-      );
+      // this.route.params
+      // .subscribe(
+      //   (params: Params) => {
+      //     console.log("Subscribing to params");
+      //     this.id = params['id'];
+      //     this.questionsService.setSelectedQuestion(this.id);
+      //     this.question$ = this.questionsService.getSelectedQuestion();
+      //   }
+      // );
 
       console.log("Question View Init: ");
       this.questionSubscription = this.question$.subscribe((q) => {
@@ -50,7 +50,7 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
       });
       console.log(this.questionSnapshot);
     } else {
-      console.log("could not find question with id: "+ this.id);
+      console.log("Could not view question with id: "+ this.id);
       this.router.navigate(["/questions"]);
     };
   }

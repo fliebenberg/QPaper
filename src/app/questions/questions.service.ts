@@ -7,6 +7,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Store } from "@ngrx/store";
 import { AppState } from "../store/app.state";
 import { Question } from '../store/question.model';
+import { QuestionVar } from "../store/question-var.model";
 import * as QActions from "../store/questions.actions";
 import * as SQActions from "../store/selected-question.actions";
 
@@ -44,23 +45,36 @@ export class QuestionsService implements OnInit, OnDestroy {
   }
 
   loadQuestions(){
-    this.addQuestion(new Question('1', 'Grade 1', 'Maths', 'Basic Maths','','Basic math question', 'What is 1+1?', 'Answer is 2'));
+    this.addQuestion(new Question('1', 'Grade 1', 'Maths', 'Basic Maths','','Basic math question', 'What is 1+1?', 'Answer is 2',
+      // question variables array
+      [
+        new QuestionVar("FredVar1", "3"),
+        new QuestionVar("FredVar2", "Tata")
+      ])
+    );
     this.addQuestion(new Question('2', 'Grade 1', 'English', 'Basic English','','First English question', 'What is a {verb}?', 'A verb is a \'do\' word.'));
     this.addQuestion(new Question('3', 'Grade 4', 'Geography', 'Advanced Geography','','This is a much longer geography question', 'What was the ancient capital of Thailand called?', 'Suhkothai'));
   }
 
   getQuestionsSnapshot() : Question[] {
-    return this.questions;
+    return Object.assign({},this.questions);
   }
 
   getQuestionSnapshot(id: string) : Question {
-    return this.questions.find(q => q.id == id);
+    return Object.assign({},this.questions.find(q => q.id == id));
   }
 
   setSelectedQuestion(id : string) : boolean {
     var question = this.getQuestionSnapshot(id);
-    this.store.dispatch(new SQActions.SetAction(question));
-    if (question) {return true;} else {return false};
+    if (question.id) {
+      console.log ("Done! Selected question set to "+ question.id);
+      this.store.dispatch(new SQActions.SetAction(question));
+      return true;
+    } else {
+      console.log("Failure: Could not find question with id :"+ question.id);
+      this.store.dispatch(new SQActions.SetAction(null));
+      return false
+    };
   }
 
   getSelectedQuestion() : Observable<Question> {

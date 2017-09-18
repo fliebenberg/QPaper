@@ -8,10 +8,18 @@ export interface CustomAction extends Action {
 
 export interface AppState {
   questions: Question[],
+  grades: string[],
+  subjects: string[],
+  topics: string[],
+  categories: string[],
   selectedQuestion : Question;
 }
 
 export const INITIAL_STATE = {
   questions: [],
+  grades: [],
+  subjects: [],
+  topics: [],
+  categories: [],
   selectedQuestion : null
 }

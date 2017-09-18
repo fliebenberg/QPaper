@@ -1,0 +1,13 @@
+<h4>Question Vars</h4>
+<p *ngIf = "vars.length == 0">No Variables</p>
+<md-nav-list *ngIf = "vars.length > 0">
+  <a
+    *ngFor = "let qVar of vars; let i = index"
+    md-list-item
+    (click) = "onVarSelected.emit(i)"
+  >{{selectedVar == i ? '>' + qVar.name + '<' : qVar.name}}</a>
+</md-nav-list>
+<button
+  type = "button" md-raised-button color = "primary"
+  (click) = "onNewVar.emit()"
+>NEW</button>

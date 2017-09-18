@@ -10,9 +10,9 @@
 
     <div class="collapse navbar-collapse" [ngClass]="{'in': !navMenuCollapsed}">
       <ul class="nav navbar-nav">
-        <li routerLinkActive = "active" (click)="toggleNavMenu()"><a routerLink = "/papers">Papers</a></li>
-        <li routerLinkActive = "active" (click)="toggleNavMenu()"><a routerLink = "/questions">Questions</a></li>
-        <li routerLinkActive = "active" (click)="toggleNavMenu()"><a routerLink = "/admin">Admin</a></li>
+        <li routerLinkActive = "active" (click)="navMenuCollapsed = true"><a routerLink = "/papers">Papers</a></li>
+        <li routerLinkActive = "active" (click)="navMenuCollapsed = true"><a routerLink = "/questions">Questions</a></li>
+        <li routerLinkActive = "active" (click)="navMenuCollapsed = true"><a routerLink = "/admin">Admin</a></li>
       </ul>
     </div>
 </nav>

@@ -1,3 +1,5 @@
+import { QuestionVar } from "./question-var.model";
+
 export class Question {
   public id: string;
   public grade: string;
@@ -7,6 +9,7 @@ export class Question {
   public description: string;
   public questionText: string;
   public answerText: string;
+  public vars: QuestionVar[];
 
   constructor(
     id: string = "",
@@ -16,7 +19,8 @@ export class Question {
     category: string = "",
     description: string = "",
     questionText: string = "",
-    answerText: string = ""
+    answerText: string = "",
+    vars: QuestionVar[] = []
   ){
     this.id = id;
     this.grade = grade;
@@ -26,5 +30,6 @@ export class Question {
     this.description = description;
     this.questionText = questionText;
     this.answerText = answerText;
+    this.vars = vars;
   }
 }

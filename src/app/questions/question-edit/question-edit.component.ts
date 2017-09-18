@@ -1,9 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, Params } from "@angular/router";
-import { NgForm } from "@angular/forms";
+import { NgForm, FormGroup, FormControl } from "@angular/forms";
 import { Subscription } from "rxjs/subscription";
-import { MdButtonModule } from "@angular/material";
+// import { MdButtonModule } from "@angular/material";
 
+// import { QuestionVarsComponent } from "../question-vars/question-vars.component";
+// import { QuestionMetaComponent } from "../question-meta/question-meta.component";
 import { Question } from "../../store/question.model";
 import { QuestionsService } from "../questions.service";
 
@@ -16,8 +18,8 @@ export class QuestionEditComponent implements OnInit {
   id: string;
   questionCopy : Question;
   questionSubscription : Subscription;
-  showMetaData = false;
-  // myQuestionChangeSub : Subscription;
+
+  questionEditForm : FormGroup;
 
   constructor(private route: ActivatedRoute,
               private router : Router,
@@ -28,38 +30,46 @@ export class QuestionEditComponent implements OnInit {
   ngOnInit() {
     console.log("question-edit.component initialising...")
     this.id = this.route.snapshot.params['id'];
-    console.log("route id: "+this.id);
+
     if (this.questionsService.setSelectedQuestion(this.id)) {
       this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
-      // subscribe to monitor when params change and load new question
-      this.route.params
-      .subscribe(
-        (params: Params) => {
-          console.log("Subscribing to params");
-          this.id = params['id'];
-          if (this.questionsService.setSelectedQuestion(this.id)) {
-            this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
-          } else {
-            console.log("Invalid id in params :" + this.id);
-            this.router.navigate(["/questions"]);
-          };
-        }
-      );
-
-      console.log("Question Edit Init: ");
-      console.log(this.questionCopy);
+      // this.route.params.subscribe(
+      //   (params: Params) => {
+      //     this.id = params['id'];
+      //     if (this.questionsService.setSelectedQuestion(this.id)) {
+      //       this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
+      //     } else {
+      //       console.log("Invalid id in params :" + this.id);
+      //       this.router.navigate(["/questions"]);
+      //     };
+      //   }
+      // );
     } else {
-      console.log("could not find question with id: "+ this.id);
+      console.log("Could not edit question with id: "+ this.id);
+      this.questionCopy = new Question();
       this.router.navigate(["/questions"]);
     };
+    this.formInit();
+    console.log(this.questionEditForm);
   }
 
-  formSubmit(form: NgForm){
-    this.questionCopy.description = form.value.description;
-    this.questionCopy.questionText = form.value.questionText;
-    this.questionCopy.answerText = form.value.answerText;
+  formSubmit(){
+    this.questionCopy.description = this.questionEditForm.value.description;
+    this.questionCopy.questionText = this.questionEditForm.value.questionText;
+    this.questionCopy.answerText = this.questionEditForm.value.answerText;
+    console.log("Saving edited question...");
+    console.log(this.questionCopy);
     this.questionsService.replaceQuestion(this.questionCopy);
     this.router.navigate(["/questions",this.questionCopy.id]);
+  }
+
+  onCancel(){
+    this.router.navigate(["/questions",this.questionCopy.id]);
+  };
+
+  onReset(){
+    this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
+    console.log("Question editor reset");
   }
 
   onDelete(index: number) {
@@ -68,7 +78,22 @@ export class QuestionEditComponent implements OnInit {
     console.log("Question "+this.id+" deleted.");
   }
 
-  onToggleMetaData() {
-    this.showMetaData = !this.showMetaData;
+  makeFormDirty() {
+    console.log("Form is now dirty...");
+    this.questionEditForm.markAsDirty();
   }
+
+  formInit(){
+    this.questionEditForm = new FormGroup({
+      'grade': new FormControl(this.questionCopy.grade),
+      'subject': new FormControl(this.questionCopy.subject),
+      'topic': new FormControl(this.questionCopy.topic),
+      'category': new FormControl(this.questionCopy.category),
+      'description': new FormControl(this.questionCopy.description),
+      'questionText': new FormControl(this.questionCopy.questionText),
+      'answerText': new FormControl(this.questionCopy.answerText),
+    });
+
+  }
+
 }

@@ -4,15 +4,16 @@ import { CustomAction } from "./app.state";
 import { Question } from "./question.model";
 import * as Actions from "./selected-question.actions";
 
-export function selectedQuestionReducer(state: Question[] = [], action: CustomAction){
+export function selectedQuestionReducer(state: Question = null, action: CustomAction){
   switch (action.type){
     case Actions.SET: {
-      if (action.payload) {
+      if (action.payload != null && action.payload.id) {
         console.log("selectedQuestion set to " + action.payload.id)
+        return action.payload;
       } else {
         console.log("selectedQuestion undefined.")
+        return null;
       };
-      return action.payload;
     }
     default: {
       return state;

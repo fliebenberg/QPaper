@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { StoreModule } from "@ngrx/store";
 
-import { MyNgMaterialModule } from "./ng-material.module";
+import { MyNgMaterialModule } from "./ng-material/ng-material.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
 
 import { AdminComponent } from './admin/admin.component';
@@ -26,6 +26,10 @@ import { SubjectSelectorComponent } from './subject-selector/subject-selector.co
 
 import { questionsReducer } from "./store/questions.reducer";
 import { selectedQuestionReducer } from "./store/selected-question.reducer";
+import { QuestionVarsComponent } from './questions/question-vars/question-vars.component';
+import { QuestionMetaComponent } from './questions/question-meta/question-meta.component';
+import { QuestionVarsListComponent } from './questions/question-vars/question-vars-list/question-vars-list.component';
+import { QuestionVarsEditComponent } from './questions/question-vars/question-vars-edit/question-vars-edit.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,11 @@ import { selectedQuestionReducer } from "./store/selected-question.reducer";
     QuestionViewComponent,
     RenderQAPipe,
     SafeHtmlPipe,
-    SubjectSelectorComponent
+    SubjectSelectorComponent,
+    QuestionVarsComponent,
+    QuestionMetaComponent,
+    QuestionVarsListComponent,
+    QuestionVarsEditComponent
   ],
   imports: [
     AppRoutingModule,
@@ -50,10 +58,11 @@ import { selectedQuestionReducer } from "./store/selected-question.reducer";
     MyNgMaterialModule,
     FlexLayoutModule,
     FormsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({questions: questionsReducer, selectedQuestion: selectedQuestionReducer})
   ],
   providers: [
-    QuestionsService, 
+    QuestionsService,
     QuestionExistsGuard],
   bootstrap: [AppComponent]
 })
