@@ -62,10 +62,38 @@
         <pre [innerHTML] = "questionCopy.answerText | render | safeHtml"></pre>
       </md-tab>
       <md-tab label="Vars">
-        <app-question-vars
+        <div fxLayout = "row">
+          <md-card fxFlex = "0 0 200px" fxLayout = "column">
+            <h4>Question Vars</h4>
+            <p *ngIf = "questionCopy.vars.length == 0">No Variables</p>
+            <md-nav-list *ngIf = "questionCopy.vars.length > 0">
+              <a
+              *ngFor = "let qVar of questionCopy.vars; let i = index"
+              md-list-item
+              (click) = "onVarSelected(i)"
+              >{{selectedVar == i ? '>' + qVar.name + '<' : qVar.name}}</a>
+            </md-nav-list>
+            <button
+            type = "button" md-raised-button color = "primary"
+            (click) = "onNewVar()"
+            >NEW</button>
+          </md-card>
+          <md-card fxFlex = "1 1 auto" fxLayout = "column">
+            <p>
+              question-vars-edit works!
+            </p>
+            <p *ngIf = "selectedVar > -1">
+              {{questionCopy.vars[selectedVar].name}} is selected.
+            </p>
+          </md-card>
+        </div>
+        <!-- <app-question-vars
           [vars] = "questionCopy.vars"
+          [questionId] = "id"
           (makeFormDirty) = "makeFormDirty()"
-        ></app-question-vars>
+          formContrlName = "vars"
+          name = "vars"
+        ></app-question-vars> -->
       </md-tab>
       <md-tab label="Meta">
         <app-question-meta

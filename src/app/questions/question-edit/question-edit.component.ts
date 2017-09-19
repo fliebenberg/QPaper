@@ -1,12 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, Params } from "@angular/router";
-import { NgForm, FormGroup, FormControl } from "@angular/forms";
+import { NgForm, FormGroup, FormControl, FormArray } from "@angular/forms";
 import { Subscription } from "rxjs/subscription";
 // import { MdButtonModule } from "@angular/material";
 
 // import { QuestionVarsComponent } from "../question-vars/question-vars.component";
 // import { QuestionMetaComponent } from "../question-meta/question-meta.component";
 import { Question } from "../../store/question.model";
+import { QuestionVar } from "../../store/question-var.model";
 import { QuestionsService } from "../questions.service";
 
 @Component({
@@ -18,6 +19,7 @@ export class QuestionEditComponent implements OnInit {
   id: string;
   questionCopy : Question;
   questionSubscription : Subscription;
+  selectedVar : number;
 
   questionEditForm : FormGroup;
 
@@ -33,6 +35,10 @@ export class QuestionEditComponent implements OnInit {
 
     if (this.questionsService.setSelectedQuestion(this.id)) {
       this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
+      if (this.questionCopy.vars.length > 0) {
+        this.selectedVar = 0;
+      }
+      console.log(this.selectedVar);
       // this.route.params.subscribe(
       //   (params: Params) => {
       //     this.id = params['id'];
@@ -50,7 +56,6 @@ export class QuestionEditComponent implements OnInit {
       this.router.navigate(["/questions"]);
     };
     this.formInit();
-    console.log(this.questionEditForm);
   }
 
   formSubmit(){
@@ -69,6 +74,11 @@ export class QuestionEditComponent implements OnInit {
 
   onReset(){
     this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
+    if (this.questionCopy.vars.length > 0) {
+      this.selectedVar = 0;
+    } else {
+      this.selectedVar = undefined;
+    }
     console.log("Question editor reset");
   }
 
@@ -85,15 +95,32 @@ export class QuestionEditComponent implements OnInit {
 
   formInit(){
     this.questionEditForm = new FormGroup({
-      'grade': new FormControl(this.questionCopy.grade),
-      'subject': new FormControl(this.questionCopy.subject),
-      'topic': new FormControl(this.questionCopy.topic),
-      'category': new FormControl(this.questionCopy.category),
-      'description': new FormControl(this.questionCopy.description),
-      'questionText': new FormControl(this.questionCopy.questionText),
-      'answerText': new FormControl(this.questionCopy.answerText),
+      "grade": new FormControl(this.questionCopy.grade),
+      "subject": new FormControl(this.questionCopy.subject),
+      "topic": new FormControl(this.questionCopy.topic),
+      "category": new FormControl(this.questionCopy.category),
+      "description": new FormControl(this.questionCopy.description),
+      "questionText": new FormControl(this.questionCopy.questionText),
+      "answerText": new FormControl(this.questionCopy.answerText)
+      // "vars": new FormControl(this.questionCopy.vars)
     });
+  }
 
+  onNewVar(){
+    console.log("Creating new question variable.");
+    this.questionCopy.vars = [...this.questionCopy.vars,new QuestionVar("Fred New Var")];
+    // console.log(this.questionCopy.vars);
+    this.selectedVar = this.questionCopy.vars.length-1;
+    this.makeFormDirty();
+    // console.log("Original question:");
+    // console.log(this.questionsService.getQuestionSnapshot(this.id).vars);
+    // console.log("This vars again...")
+    // console.log(this.questionCopy.vars);
+  }
+
+  onVarSelected(id: number){
+    console.log("Selected question variable no: " + id);
+    this.selectedVar = id;
   }
 
 }

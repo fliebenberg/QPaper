@@ -54,6 +54,8 @@ export class QuestionsService implements OnInit, OnDestroy {
     );
     this.addQuestion(new Question('2', 'Grade 1', 'English', 'Basic English','','First English question', 'What is a {verb}?', 'A verb is a \'do\' word.'));
     this.addQuestion(new Question('3', 'Grade 4', 'Geography', 'Advanced Geography','','This is a much longer geography question', 'What was the ancient capital of Thailand called?', 'Suhkothai'));
+    console.log("Questions loaded");
+    console.log(this.getQuestionSnapshot("2"));
   }
 
   getQuestionsSnapshot() : Question[] {
@@ -61,7 +63,11 @@ export class QuestionsService implements OnInit, OnDestroy {
   }
 
   getQuestionSnapshot(id: string) : Question {
-    return Object.assign({},this.questions.find(q => q.id == id));
+    var tempQ : Question;
+    tempQ = Object.assign({},this.questions.find(q => q.id == id));
+    console.log("Question snapshot...");
+    console.log(tempQ);
+    return tempQ;
   }
 
   setSelectedQuestion(id : string) : boolean {
