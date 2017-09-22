@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
 import { MdListModule, MdButtonModule } from "@angular/material";
@@ -23,7 +24,8 @@ export class QuestionListComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private questionsService: QuestionsService
+    private questionsService: QuestionsService,
+    private router : Router
   ) {
     this.questions = this.store.select("questions");
   }
@@ -32,7 +34,8 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
 
   onAddQuestion() {
-    this.store.dispatch(new QActions.AddAction(new Question('3', 'Grade6', 'Maths', 'More advanced maths','','Dificult math question', 'What is 100+100?', 'Answer is 200')))
+    this.router.navigate(["/question", "NEW", "edit"]);
+    // this.questionsService.addQuestion(new Question('3', 'Grade6', 'Maths', 'More advanced maths','','Dificult math question', 'What is 100+100?', 'Answer is 200'));
     // this.questionsService.addQuestion(
     //   new Question('3', 'Grade6', 'Maths', 'More advanced maths','','Dificult math question', 'What is 100+100?', 'Answer is 200')
     // )

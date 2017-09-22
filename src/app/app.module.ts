@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { StoreModule } from "@ngrx/store";
+import { StoreRouterConnectingModule } from "@ngrx/router-store";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { environment } from "../environments/environment";
 
 import { MyNgMaterialModule } from "./ng-material/ng-material.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -53,7 +56,9 @@ import { QuestionMetaComponent } from './questions/question-meta/question-meta.c
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({questions: questionsReducer, selectedQuestion: selectedQuestionReducer})
+    StoreModule.forRoot({questions: questionsReducer, selectedQuestion: selectedQuestionReducer}),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    StoreRouterConnectingModule
   ],
   providers: [
     QuestionsService,

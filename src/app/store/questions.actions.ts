@@ -7,28 +7,24 @@ export const ADD = "[Questions] Add";
 export const DELETE = "[Questions] Delete";
 export const REPLACE = "[Questions] Replace";
 
-export class LoadAction implements CustomAction {
+export class Load implements Action {
   readonly type = LOAD;
   constructor(public payload: Question[]) {};
 }
 
-export class AddAction implements CustomAction {
+export class Add implements Action {
   readonly type = ADD;
   constructor(public payload: Question) {};
 }
 
-export class DeleteAction implements CustomAction {
+export class Delete implements Action {
   readonly type = DELETE;
   constructor(public payload: Question) {};
 }
 
-export class ReplaceAction implements CustomAction {
+export class Replace implements Action {
   readonly type = REPLACE;
   constructor(public payload: Question) {};
 }
 
-export type All =
-  LoadAction |
-  AddAction |
-  DeleteAction |
-  ReplaceAction;
+export type All = Load | Add | Delete | Replace;

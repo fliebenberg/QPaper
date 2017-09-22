@@ -88,16 +88,29 @@ export class QuestionsService implements OnInit, OnDestroy {
   }
 
   replaceQuestion(newQuestion: Question) : void {
-    this.store.dispatch(new QActions.ReplaceAction(newQuestion));
+    this.store.dispatch(new QActions.Replace(newQuestion));
   }
 
-  addQuestion(question: Question) : void {
-    this.store.dispatch(new QActions.AddAction(question));
-    // this.doQuestionsChanged();
+  addQuestion(question : Question) : string {
+    if (question.id == "NEW") {
+      let newId: string = this.getNewQuestionId();
+      question.id = newId;
+    }
+    this.store.dispatch(new QActions.Add(question));
+    return question.id;
   }
 
+  getNewQuestionId () : string {
+    let maxId = "0";
+    this.questions.forEach((question : Question) => {
+      if (+question.id > +maxId) {
+        maxId = question.id;
+      }
+    })
+    return (+maxId+1).toString();
+  }
   deleteQuestion(question: Question) : void {
-    this.store.dispatch(new QActions.DeleteAction(question));
+    this.store.dispatch(new QActions.Delete(question));
     // let subscription = this.selectedQuestion.subscribe(q => {
     //   if (q.id === question.id) {
     //       this.store.dispatch(new SQActions.SetAction(null));

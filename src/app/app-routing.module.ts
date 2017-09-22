@@ -14,13 +14,13 @@ const AppRoutes: Routes = [
   {path: "", redirectTo: "questions", pathMatch: "full"},
   {path: "papers", component: PapersComponent},
   {path: "questions", component: QuestionsComponent},
-  {path: "questions/:id",
+  {path: "question/:id",
     // canActivate: [QuestionExistsGuard],
     component: QuestionViewComponent},
-  {path: "questions/:id/edit", component: QuestionEditComponent},
+  {path: "question/:id/edit", component: QuestionEditComponent},
   {path: "admin", component: AdminComponent},
   {path: "not-found", component: NotFoundComponent},
-//  {path: "**", redirectTo: "not-found"}
+  {path: "**", redirectTo: "not-found"}
 ]
 
 @NgModule({

@@ -2,10 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { NgForm, FormGroup, FormControl, FormArray } from "@angular/forms";
 import { Subscription } from "rxjs/subscription";
-// import { MdButtonModule } from "@angular/material";
 
-// import { QuestionVarsComponent } from "../question-vars/question-vars.component";
-// import { QuestionMetaComponent } from "../question-meta/question-meta.component";
 import { Question } from "../../store/question.model";
 import { QuestionVar } from "../../store/question-var.model";
 import { QuestionsService } from "../questions.service";
@@ -17,6 +14,7 @@ import { QuestionsService } from "../questions.service";
 })
 export class QuestionEditComponent implements OnInit {
   id: string;
+  newQuestion : boolean = false;
   questionCopy : Question;
   questionSubscription : Subscription;
   selectedVar : number;
@@ -32,12 +30,15 @@ export class QuestionEditComponent implements OnInit {
   ngOnInit() {
     console.log("question-edit.component initialising...")
     this.id = this.route.snapshot.params['id'];
-
+    if (this.id == "NEW") {
+      console.log("NEW question edit");
+      console.log(this.id);
+      this.newQuestion = true;
+      this.questionCopy = new Question(this.questionsService.getNewQuestionId());
+    } else
     if (this.questionsService.setSelectedQuestion(this.id)) {
+      console.log("Existing question edit");
       this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
-      if (this.questionCopy.vars.length > 0) {
-        this.selectedVar = 0;
-      }
       console.log(this.selectedVar);
       // this.route.params.subscribe(
       //   (params: Params) => {
@@ -55,6 +56,9 @@ export class QuestionEditComponent implements OnInit {
       this.questionCopy = new Question();
       this.router.navigate(["/questions"]);
     };
+    if (this.questionCopy.vars.length > 0) {
+      this.selectedVar = 0;
+    }
     this.formInit();
   }
 
@@ -62,14 +66,24 @@ export class QuestionEditComponent implements OnInit {
     this.questionCopy.description = this.questionEditForm.value.description;
     this.questionCopy.questionText = this.questionEditForm.value.questionText;
     this.questionCopy.answerText = this.questionEditForm.value.answerText;
-    console.log("Saving edited question...");
+    if (this.newQuestion) {
+      console.log("Saving new question...");
+      let newId: string = this.questionsService.addQuestion(this.questionCopy);
+      this.questionCopy.id = newId;
+    } else {
+      console.log("Saving edited question...");
+      this.questionsService.replaceQuestion(this.questionCopy);
+    }
     console.log(this.questionCopy);
-    this.questionsService.replaceQuestion(this.questionCopy);
-    this.router.navigate(["/questions",this.questionCopy.id]);
+    this.router.navigate(["/question",this.questionCopy.id]);
   }
 
   onCancel(){
-    this.router.navigate(["/questions",this.questionCopy.id]);
+    if (this.newQuestion) {
+      this.router.navigate(["/questions"]);
+    } else {
+      this.router.navigate(["/question",this.questionCopy.id]);
+    }
   };
 
   onReset(){
@@ -83,17 +97,17 @@ export class QuestionEditComponent implements OnInit {
   }
 
   onDelete(index: number) {
-
-    // this.questionsService.removeQuestion(this.index);
-    console.log("Question "+this.id+" deleted.");
+    this.questionsService.deleteQuestion(this.questionCopy);
+    console.log("Question "+this.questionCopy.id+" deleted.");
   }
 
-  makeFormDirty() {
-    console.log("Form is now dirty...");
-    this.questionEditForm.markAsDirty();
-  }
+  // makeFormDirty() {
+  //   console.log("Form is now dirty...");
+  //   this.questionEditForm.markAsDirty();
+  // }
 
   formInit(){
+    console.log("init form...")
     this.questionEditForm = new FormGroup({
       "grade": new FormControl(this.questionCopy.grade),
       "subject": new FormControl(this.questionCopy.subject),
@@ -101,9 +115,12 @@ export class QuestionEditComponent implements OnInit {
       "category": new FormControl(this.questionCopy.category),
       "description": new FormControl(this.questionCopy.description),
       "questionText": new FormControl(this.questionCopy.questionText),
-      "answerText": new FormControl(this.questionCopy.answerText)
-      // "vars": new FormControl(this.questionCopy.vars)
+      "answerText": new FormControl(this.questionCopy.answerText),
     });
+    if (this.selectedVar > -1) {
+      this.createVarForm();
+    }
+    console.log(this.questionEditForm);
   }
 
   onNewVar(){
@@ -111,16 +128,42 @@ export class QuestionEditComponent implements OnInit {
     this.questionCopy.vars = [...this.questionCopy.vars,new QuestionVar("Fred New Var")];
     // console.log(this.questionCopy.vars);
     this.selectedVar = this.questionCopy.vars.length-1;
-    this.makeFormDirty();
-    // console.log("Original question:");
-    // console.log(this.questionsService.getQuestionSnapshot(this.id).vars);
-    // console.log("This vars again...")
-    // console.log(this.questionCopy.vars);
+    if (this.selectedVar == 0) {
+      this.createVarForm();
+    }
+    this.populateVarForm();
+    this.questionEditForm.markAsDirty();
+    // this.makeFormDirty();
   }
 
   onVarSelected(id: number){
     console.log("Selected question variable no: " + id);
     this.selectedVar = id;
+    this.populateVarForm();
   }
 
+  saveVarChanges() {
+    this.questionCopy.vars[this.selectedVar] = {
+      ...this.questionCopy.vars[this.selectedVar],
+      name: this.questionEditForm.get("vars.name").value,
+      defaultVal: this.questionEditForm.get("vars.defaultVal").value,
+      specifiedVal: this.questionEditForm.get("vars.specifiedVal").value
+    };
+    this.questionEditForm.get("vars").markAsPristine();
+    this.questionEditForm.markAsDirty();
+    // this.makeFormDirty();
+  }
+
+  createVarForm() {
+    this.questionEditForm.addControl("vars", new FormGroup({
+      "name": new FormControl(this.questionCopy.vars[this.selectedVar].name),
+      "defaultVal": new FormControl(this.questionCopy.vars[this.selectedVar].defaultVal),
+      "specifiedVal": new FormControl(this.questionCopy.vars[this.selectedVar].specifiedVal)
+    }));
+  }
+  populateVarForm() {
+    this.questionEditForm.get("vars.name").setValue(this.questionCopy.vars[this.selectedVar].name);
+    this.questionEditForm.get("vars.defaultVal").setValue(this.questionCopy.vars[this.selectedVar].defaultVal);
+    this.questionEditForm.get("vars.specifiedVal").setValue(this.questionCopy.vars[this.selectedVar].specifiedVal);
+  }
 }

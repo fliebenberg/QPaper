@@ -13,17 +13,9 @@
         name="description"
         >
       </md-input-container>
-      <!-- {{questionCopy.description}} -->
     </h4>
-    <!-- <i
-      class="glyphicon"
-      [ngClass] = "showMetaData ? 'glyphicon-eye-close' : 'glyphicon-eye-open'"
-      (click) = "onToggleMetaData()"
-      [mdTooltip] = "showMetaData ? 'Hide Metadata' : 'Show Metadata'"
-      mdTooltipPosition = "before">
-    </i> -->
   </div>
-  <div>
+  <div *ngIf = "questionCopy.description.length > 0">
     <md-tab-group>
       <md-tab label="Filter">
         <div>
@@ -78,22 +70,39 @@
             (click) = "onNewVar()"
             >NEW</button>
           </md-card>
-          <md-card fxFlex = "1 1 auto" fxLayout = "column">
-            <p>
-              question-vars-edit works!
-            </p>
-            <p *ngIf = "selectedVar > -1">
-              {{questionCopy.vars[selectedVar].name}} is selected.
-            </p>
+          <md-card fxFlex = "1 1 auto">
+            <div *ngIf = "selectedVar > -1" formGroupName = "vars" fxLayout = "column">
+              <md-input-container>
+                <input
+                type="text" mdInput
+                placeholder="Variable Name"
+                formControlName = "name"
+                name="name"
+                >
+              </md-input-container>
+              <md-input-container>
+                <input
+                type="text" mdInput
+                placeholder="Variable Default Value"
+                formControlName = "defaultVal"
+                name="defaultVal"
+                >
+              </md-input-container>
+              <md-input-container>
+                <input
+                type="text" mdInput
+                placeholder="Variable Specified Value"
+                formControlName = "specifiedVal"
+                name="specifiedVal"
+                >
+              </md-input-container>
+              <button *ngIf = "questionEditForm.get('vars').dirty"
+                md-raised-button color = "primary" type = "button"
+                (click) = "saveVarChanges()"
+              >Save Changes</button>
+            </div>
           </md-card>
         </div>
-        <!-- <app-question-vars
-          [vars] = "questionCopy.vars"
-          [questionId] = "id"
-          (makeFormDirty) = "makeFormDirty()"
-          formContrlName = "vars"
-          name = "vars"
-        ></app-question-vars> -->
       </md-tab>
       <md-tab label="Meta">
         <app-question-meta
