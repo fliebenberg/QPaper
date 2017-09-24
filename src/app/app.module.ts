@@ -30,6 +30,7 @@ import { SubjectSelectorComponent } from './subject-selector/subject-selector.co
 import { questionsReducer } from "./store/questions.reducer";
 import { selectedQuestionReducer } from "./store/selected-question.reducer";
 import { QuestionMetaComponent } from './questions/question-meta/question-meta.component';
+import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { QuestionMetaComponent } from './questions/question-meta/question-meta.c
     SafeHtmlPipe,
     SubjectSelectorComponent,
     QuestionMetaComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -59,6 +61,9 @@ import { QuestionMetaComponent } from './questions/question-meta/question-meta.c
     StoreModule.forRoot({questions: questionsReducer, selectedQuestion: selectedQuestionReducer}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule
+  ],
+  entryComponents: [
+    ConfirmDialogComponent
   ],
   providers: [
     QuestionsService,

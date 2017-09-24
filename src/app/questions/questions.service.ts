@@ -3,6 +3,8 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/take";
+import "rxjs/add/operator/map";
 
 import { Store } from "@ngrx/store";
 import { AppState } from "../store/app.state";
@@ -64,6 +66,14 @@ export class QuestionsService implements OnInit, OnDestroy {
 
   getQuestionSnapshot(id: string) : Question {
     var tempQ : Question;
+    // this.questions$
+    //   .take(1)
+    //   .map(questionArray => {
+    //     return questionArray.find(question =>{
+    //       return question.id == id;
+    //     })
+    //   })
+    //   .subscribe(question => {tempQ = question});
     tempQ = Object.assign({},this.questions.find(q => q.id == id));
     console.log("Question snapshot...");
     console.log(tempQ);

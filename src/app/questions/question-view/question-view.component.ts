@@ -2,11 +2,13 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { Subscription } from "rxjs/subscription";
 import { Observable } from "rxjs/Observable";
+import { MdDialog } from "@angular/material";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store/app.state";
 
 import { Question } from "../../store/question.model";
 import { QuestionsService } from "../questions.service";
+import { ConfirmDialogComponent } from "../../shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-question-view',
@@ -22,7 +24,8 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private router : Router,
               private store: Store<AppState>,
-              private questionsService : QuestionsService
+              private questionsService : QuestionsService,
+              private dialog : MdDialog
             ) {
 
   }
@@ -56,11 +59,14 @@ export class QuestionViewComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-
-    console.log("Question "+this.questionSnapshot.description+" deleted.");
-    this.questionsService.deleteQuestion(this.questionSnapshot);
-    this.router.navigate(['/questions']);
-    // this.questionsService.removeQuestion(this.index);
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {data : "Delete question?"});
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log("Question "+this.questionSnapshot.description+" deleted.");
+        this.questionsService.deleteQuestion(this.questionSnapshot);
+        this.router.navigate(['/questions']);
+      }
+    });
 
   }
 

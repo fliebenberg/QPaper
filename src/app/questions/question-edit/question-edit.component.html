@@ -56,11 +56,11 @@
       <md-tab label="Vars">
         <div fxLayout = "row">
           <md-card fxFlex = "0 0 200px" fxLayout = "column">
-            <h4>Question Vars</h4>
-            <p *ngIf = "questionCopy.vars.length == 0">No Variables</p>
-            <md-nav-list *ngIf = "questionCopy.vars.length > 0">
+            <h4>Variables</h4>
+            <p *ngIf = "varsCopy.length == 0">No Variables</p>
+            <md-nav-list *ngIf = "varsCopy.length > 0">
               <a
-              *ngFor = "let qVar of questionCopy.vars; let i = index"
+              *ngFor = "let qVar of varsCopy; let i = index"
               md-list-item
               (click) = "onVarSelected(i)"
               >{{selectedVar == i ? '>' + qVar.name + '<' : qVar.name}}</a>
@@ -96,10 +96,23 @@
                 name="specifiedVal"
                 >
               </md-input-container>
-              <button *ngIf = "questionEditForm.get('vars').dirty"
+              <div fxLayout = "row" fxLayoutGap = "5px">
+                <button *ngIf = "questionEditForm.get('vars').dirty"
+                fxFlex = "1 1 auto"
                 md-raised-button color = "primary" type = "button"
                 (click) = "saveVarChanges()"
-              >Save Changes</button>
+                >SAVE CHANGES</button>
+                <button *ngIf = "questionEditForm.get('vars').dirty"
+                fxFlex = "1 1 auto"
+                md-raised-button color = "warn" type = "button"
+                (click) = "onVarSelected(selectedVar)"
+                >CANCEL CHANGES</button>
+                <button *ngIf = "!questionEditForm.get('vars').dirty"
+                fxFlex = "0 0 auto"
+                md-raised-button color = "warn" type = "button"
+                (click) = "onVarDelete()"
+                >DELETE VARIABLE</button>
+              </div>
             </div>
           </md-card>
         </div>
@@ -113,8 +126,19 @@
   </div>
   <div style="height : 50px"></div>
   <div fxLayout = "row" fxLayoutAlign = "end center" fxLayoutGap = "10px" class="action-bar">
-    <button md-raised-button color = "primary" type="submit" *ngIf = "questionEditForm.dirty">SAVE</button>
-    <button md-raised-button color = "warn" type="button" (click) = "onCancel()">CANCEL</button>
-    <button md-raised-button color = "accent" type="button" *ngIf = "questionEditForm.dirty" (click) = "onReset()" >RESET</button>
+    <button
+      *ngIf = "questionEditForm.dirty"
+      [disabled] = "selectedVar > -1 && questionEditForm.get('vars').dirty"
+      md-raised-button color = "primary" type="submit"
+    >SAVE</button>
+    <button
+      md-raised-button color = "warn" type="button"
+      (click) = "onCancel()"
+    >CANCEL</button>
+    <button
+      *ngIf = "questionEditForm.dirty"
+      md-raised-button color = "accent" type="button"
+      (click) = "onReset()"
+    >RESET</button>
   </div>
 </form>
