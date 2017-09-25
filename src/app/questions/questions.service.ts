@@ -21,6 +21,10 @@ import * as SQActions from "../store/selected-question.actions";
 @Injectable()
 export class QuestionsService implements OnInit, OnDestroy {
   private questions$: Observable<Question[]>;
+  public grades$: Observable<string[]>;
+  public subjects$: Observable<string[]>;
+  public topics$: Observable<string[]>;
+  public categories$: Observable<string[]>;
   private questions: Question[];
   private questionsSubscription : Subscription;
   private selectedQuestion$: Observable<Question>;
@@ -41,6 +45,54 @@ export class QuestionsService implements OnInit, OnDestroy {
         this.questions = questions;
       }
     )
+    console.log("Grades loading...");
+    this.grades$ =
+      this.questions$.map((questions: Question[]) => {
+        return questions.map((question: Question) => {
+          return question.grade
+        }).reduce((gradesArray : string[], grade: string) => {
+          if (gradesArray.indexOf(grade) == -1) {
+            gradesArray.push(grade);
+          }
+          return gradesArray;
+        }, []).sort();
+      });
+    console.log("Subjects loading...");
+    this.subjects$ =
+      this.questions$.map((questions: Question[]) => {
+        return questions.map((question: Question) => {
+          return question.subject
+        }).reduce((subjectsArray : string[], subject: string) => {
+          if (subjectsArray.indexOf(subject) == -1) {
+            subjectsArray.push(subject);
+          }
+          return subjectsArray;
+        }, []).sort();
+      });
+    console.log("Topics loading...");
+    this.topics$ =
+      this.questions$.map((questions: Question[]) => {
+        return questions.map((question: Question) => {
+          return question.topic
+        }).reduce((topicsArray : string[], topic: string) => {
+          if (topicsArray.indexOf(topic) == -1) {
+            topicsArray.push(topic);
+          }
+          return topicsArray;
+        }, []).sort();
+      });
+    console.log("Categories loading...");
+    this.categories$ =
+      this.questions$.map((questions: Question[]) => {
+        return questions.map((question: Question) => {
+          return question.category
+        }).reduce((categoriesArray : string[], category: string) => {
+          if (categoriesArray.indexOf(category) == -1) {
+            categoriesArray.push(category);
+          }
+          return categoriesArray;
+        }, []).sort();
+      });
   }
 
   ngOnInit(){

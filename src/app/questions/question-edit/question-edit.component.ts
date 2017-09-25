@@ -21,6 +21,10 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   varsCopy : QuestionVar[];
   selectedVar : number;
   varsDirty : boolean = false;
+  addGrade : boolean = false;
+  addSubject : boolean = false;
+  addTopic : boolean = false;
+  addCategory : boolean = false;
 
   questionEditForm : FormGroup;
 
@@ -61,9 +65,13 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     console.log("Init edit form...")
     this.questionEditForm = new FormGroup({
       "grade": new FormControl(this.questionCopy.grade),
+      "newGrade": new FormControl(),
       "subject": new FormControl(this.questionCopy.subject),
+      "newSubject": new FormControl(),
       "topic": new FormControl(this.questionCopy.topic),
+      "newTopic": new FormControl(),
       "category": new FormControl(this.questionCopy.category),
+      "newCategory": new FormControl(),
       "description": new FormControl(this.questionCopy.description),
       "questionText": new FormControl(this.questionCopy.questionText),
       "answerText": new FormControl(this.questionCopy.answerText),
@@ -78,6 +86,18 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
   formSubmit(){
     this.questionCopy.description = this.questionEditForm.value.description;
+    if (this.addGrade) {
+      this.questionCopy.grade = this.questionEditForm.value.newGrade;
+    } else {
+      this.questionCopy.grade = this.questionEditForm.value.grade;
+    }
+    if (this.addGrade || this.addSubject) {
+      this.questionCopy.subject = this.questionEditForm.value.newSubject;
+    } else {
+      this.questionCopy.subject = this.questionEditForm.value.subject;
+    }
+    this.questionCopy.topic = this.questionEditForm.value.topic;
+    this.questionCopy.category = this.questionEditForm.value.category;
     this.questionCopy.questionText = this.questionEditForm.value.questionText;
     this.questionCopy.answerText = this.questionEditForm.value.answerText;
     this.questionCopy.vars = [...this.varsCopy];
@@ -104,20 +124,43 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
 
   onReset(){
     this.ngOnInit();
-    // this.questionCopy = this.questionsService.getQuestionSnapshot(this.id);
-    // if (this.questionCopy.vars.length > 0) {
-    //   this.selectedVar = 0;
-    // } else {
-    //   this.selectedVar = undefined;
-    // }
-    // console.log("Question editor reset");
   }
 
-  // onDelete(index: number) {
-  //   this.questionsService.deleteQuestion(this.questionCopy);
-  //   console.log("Question "+this.questionCopy.id+" deleted.");
-  // }
+  onGradeSelectionChange() {
+    console.log("Selected grade:" + this.questionCopy.grade);
+    if (this.questionCopy.grade == "***NEWGRADE") {
+      this.addGrade = true;
+    } else {
+      this.addGrade = false;
+    }
+  }
 
+  onSubjectSelectionChange() {
+    console.log("Selected subject:" + this.questionCopy.subject);
+    if (this.questionCopy.subject == "***NEWSUBJECT") {
+      this.addSubject = true;
+    } else {
+      this.addSubject = false;
+    }
+  }
+
+  onTopicSelectionChange() {
+    console.log("Selected topic:" + this.questionCopy.topic);
+    if (this.questionCopy.topic == "***NEWTOPIC") {
+      this.addTopic = true;
+    } else {
+      this.addTopic = false;
+    }
+  }
+
+  onCategorySelectionChange() {
+    console.log("Selected category:" + this.questionCopy.category);
+    if (this.questionCopy.category == "***NEWCATEGORY") {
+      this.addCategory = true;
+    } else {
+      this.addCategory = false;
+    }
+  }
 
   onNewVar(){
     console.log("Creating new question variable.");

@@ -18,8 +18,108 @@
   <div *ngIf = "questionCopy.description.length > 0">
     <md-tab-group>
       <md-tab label="Filter">
-        <div>
-          Filters will go here.
+        <h1></h1> 
+        <div fxLayout = "column" fxLayoutGap = "30px">
+          <div fxLayout = "column" fxLayoutGap = "10px">
+            <md-select
+              placeholder="Grade"
+              [(ngModel)] = "questionCopy.grade"
+              (change) = "onGradeSelectionChange()"
+              formControlName = "grade" name = "grade"
+              color="secondary"
+              fxFlex = "0 1 auto"
+            >
+              <md-option
+                *ngFor = "let grade of (questionsService.grades$ | async)"
+                value="{{grade}}"
+              >{{grade}}</md-option>
+              <md-option value = "***NEWGRADE">
+                New grade...
+              </md-option>
+            </md-select>
+            <md-input-container *ngIf = "addGrade">
+              <input type="text" mdInput
+                placeholder = "Enter new grade"
+                formControlName = "newGrade" name = "newGrade"
+              >
+            </md-input-container>
+          </div>
+          <div fxLayout = "column" fxLayoutGap = "10px">
+            <md-select
+              *ngIf = "!addGrade"
+              placeholder="Subject"
+              [(ngModel)] = "questionCopy.subject"
+              (change) = "onSubjectSelectionChange()"
+              formControlName = "subject"
+              name = "subject"
+              color="secondary"
+              fxFlex
+              >
+                <md-option
+                  *ngFor = "let subject of (questionsService.subjects$ | async)"
+                  value="{{subject}}"
+                >{{subject}}</md-option>
+                <md-option value = "***NEWSUBJECT">
+                  New subject...
+                </md-option>
+            </md-select>
+            <md-input-container *ngIf = "addGrade || addSubject">
+              <input type="text" mdInput
+                placeholder = "Enter new subject"
+                formControlName = "newSubject" name = "newSubject"
+              >
+            </md-input-container>
+          </div>
+          <div fxLayout = "column" fxLayoutGap = "10px">
+            <md-select
+              *ngIf = "!(addGrade || addSubject)"
+              placeholder="Topic"
+              [(ngModel)] = "questionCopy.topic"
+              (change) = "onTopicSelectionChange()"
+              formControlName = "topic" name = "topic"
+              color="secondary"
+              fxFlex
+              >
+                <md-option
+                  *ngFor = "let topic of (questionsService.topics$ | async)"
+                  value="{{topic}}"
+                >{{topic}}</md-option>
+                <md-option value = "***NEWTOPIC">
+                  New topic...
+                </md-option>
+            </md-select>
+            <md-input-container *ngIf = "addGrade || addSubject || addTopic">
+              <input type="text" mdInput
+                placeholder = "Enter new topic"
+                formControlName = "newTopic" name = "newTopic"
+              >
+            </md-input-container>
+          </div>
+          <div fxLayout = "column" fxLayoutGap = "10px">
+            <md-select
+              *ngIf = "!(addGrade || addSubject || addTopic)"
+              placeholder="Category"
+              [(ngModel)] = "questionCopy.category"
+              (change) = "onCategorySelectionChange()"
+              formControlName = "category" name = "category"
+              color="secondary"
+              fxFlex
+              >
+                <md-option
+                  *ngFor = "let category of (questionsService.categories$ | async)"
+                  value="{{category}}"
+                >{{topic}}</md-option>
+                <md-option value = "***NEWCATEGORY">
+                  New category...
+                </md-option>
+            </md-select>
+            <md-input-container *ngIf = "addGrade || addSubject || addTopic || addCategory">
+              <input type="text" mdInput
+                placeholder = "Enter new category"
+                formControlName = "newCategory" name = "newCategory"
+              >
+            </md-input-container>
+          </div>
         </div>
       </md-tab>
       <md-tab label="Question">
@@ -31,8 +131,7 @@
             [(ngModel)] = "questionCopy.questionText"
             formControlName = "questionText"
             name="questionText"
-            >
-          </textarea>
+          ></textarea>
         </md-input-container>
         <h6>Question Preview</h6>
         <pre [innerHTML] = "questionCopy.questionText | render | safeHtml"></pre>

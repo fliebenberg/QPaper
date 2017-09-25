@@ -19,7 +19,7 @@ interface AppState {
   styleUrls: ['./question-list.component.css']
 })
 export class QuestionListComponent implements OnInit, OnDestroy {
-  questions: Observable<Question[]>;
+  questions$: Observable<Question[]>;
   // private myQuestionsChangedSub: Subscription;
 
   constructor(
@@ -27,10 +27,11 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     private questionsService: QuestionsService,
     private router : Router
   ) {
-    this.questions = this.store.select("questions");
+    this.questions$ = this.store.select("questions");
   }
 
   ngOnInit() {
+    console.log(this.questionsService.grades$)
   }
 
   onAddQuestion() {

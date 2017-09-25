@@ -1,19 +1,21 @@
 <div fxLayout="row" id="filter-bar">
-  <md-select color="secondary" placeholder="Grade">
-    <md-option value="Grade R">Grade R</md-option>
-    <md-option value="Grade 1">Grade 1</md-option>
-    <md-option value="Grade 2">Grade 2</md-option>
+  <md-select color="secondary" placeholder="Grade" fxFlex>
+    <md-option
+      *ngFor = "let grade of (questionsService.grades$ | async)"
+      value="{{grade}}"
+    >{{grade}}</md-option>
   </md-select>
-  <md-select placeholder="Subject">
-    <md-option value="English">English</md-option>
-    <md-option value="Afrikaans">Afrikaans</md-option>
-    <md-option value="Maths">Maths</md-option>
+  <md-select color="secondary" placeholder="Subject" fxFlex>
+    <md-option
+      *ngFor = "let subject of (questionsService.subjects$ | async)"
+      value="{{subject}}"
+    >{{subject}}</md-option>
   </md-select>
 </div>
 <div fxLayout="column" id="question-list">
   <md-nav-list>
     <app-question-list-item
-      *ngFor="let question of (questions | async); let i = index"
+      *ngFor="let question of (questions$ | async); let i = index"
       [question] = "question"
       [index] = "i">
     </app-question-list-item>
