@@ -1,27 +1,76 @@
-<div fxLayout="row" id="filter-bar">
-  <md-select color="secondary" placeholder="Grade" fxFlex>
-    <md-option
-      *ngFor = "let grade of (questionsService.grades$ | async)"
-      value="{{grade}}"
-    >{{grade}}</md-option>
-  </md-select>
-  <md-select color="secondary" placeholder="Subject" fxFlex>
-    <md-option
-      *ngFor = "let subject of (questionsService.subjects$ | async)"
-      value="{{subject}}"
-    >{{subject}}</md-option>
-  </md-select>
-</div>
-<div fxLayout="column" id="question-list">
-  <md-nav-list>
-    <app-question-list-item
-      *ngFor="let question of (questions$ | async); let i = index"
-      [question] = "question"
-      [index] = "i">
-    </app-question-list-item>
-  </md-nav-list>
+<div class="row">
+  <div class = "col">
+    <div class = "row bg-light pb-1 pt-2" id="filter-bar">
+      <!-- Grade Selector -->
+      <div class = "col-12 col-sm-6 col-lg-3">
+          <select id = "gradeSelector"
+            class = "form-control"
+            [(ngModel)] = "gradeFilterValue" (change) = "onGradeSelectionChange()"
+            color="secondary"
+          >
+            <option value = "ALL">Show all grades</option>
+            <option
+              *ngFor = "let grade of (questions$ | async | gradeFilter)"
+              value="{{grade}}"
+            >{{grade}}</option>
+          </select>
+      </div>
+      <!-- Subject Selector -->
+      <div class="col-12 col-sm-6 col-lg-3">
+        <select id = "subjectSelector"
+          class = "form-control"
+          [(ngModel)] = "subjectFilterValue" (change) = "onSubjectSelectionChange()"
+          color="secondary"
+        >
+          <option value = "ALL">Show all subjects</option>
+          <option
+            *ngFor = "let subject of (questions$ | async | subjectFilter: gradeFilterValue)"
+            value="{{subject}}"
+          >{{subject}}</option>
+        </select>
+      </div>
+      <div class = "col-12 col-sm-6 col-lg-3">
+        <!-- <label for="topicSelector" class = "col-1">Show topic</label> -->
+        <select id = "topicSelector"
+          class = "form-control"
+          [(ngModel)] = "topicFilterValue" (change) = "onTopicSelectionChange()"
+          color="secondary"
+        >
+          <option value = "ALL">Show all topics</option>
+          <option
+            *ngFor = "let topic of (questions$ | async | topicFilter : gradeFilterValue: subjectFilterValue)"
+            value="{{topic}}"
+          >{{topic}}</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <select id = "categorySelector"
+          class = "form-control"
+          [(ngModel)] = "categoryFilterValue" (change) = "onCategorySelectionChange()"
+          color="secondary"
+        >
+          <option value = "ALL">Show all categories</option>
+          <option
+            *ngFor = "let category of (questions$ | async | categoryFilter: gradeFilterValue : subjectFilterValue : topicFilterValue)"
+            value="{{category}}"
+          >{{category}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row bg-light pb-2">
+      <div class = "col" id="question-list">
+        <div class="list-group">
+          <app-question-list-item
+            *ngFor="let question of (questions$ | async | questionFilter: gradeFilterValue: subjectFilterValue: topicFilterValue: categoryFilterValue); let i = index"
+            [question] = "question"
+            [index] = "i">
+          </app-question-list-item>
+        </div>
 
-  <button type="button" color="primary" md-raised-button (click) = "onAddQuestion()">
-    NEW
-  </button>
+        <button class = "btn btn-outline-primary btn-block" type="button" (click) = "onAddQuestion()">
+          NEW
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

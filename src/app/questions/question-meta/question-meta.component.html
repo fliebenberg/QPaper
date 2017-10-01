@@ -1,32 +1,21 @@
-<md-card>
-  <div class="row">
-    <div class="col-xs-3">
-      <md-input-container>
-        <input type="text" mdInput placeholder="ID" value="{{question.id}}" disabled>
-      </md-input-container>
-    </div>
-    <div class="col-xs-6">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Created by" value="Fred Liebenberg" disabled>
-      </md-input-container>
-    </div>
-    <div class="col-xs-3">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Created on" value="02/08/2017" disabled>
-      </md-input-container>
+  <div class="row form-group">
+    <div class="col-12">
+      <p class="form-control-plaintext">
+        Question ID: {{question.id}}
+      </p>
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-3"></div>
-    <div class="col-xs-6">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Last edited by" value="Debbie Liebenberg" disabled>
-      </md-input-container>
-    </div>
-    <div class="col-xs-3">
-      <md-input-container>
-        <input type="text" mdInput placeholder="Last edited on" value="02/08/2017" disabled>
-      </md-input-container>
+    <div class="col-12">
+      <p class="form-control-plaintext">
+        Created by Fred Liebenberg on 02/08/2017
+      </p>
     </div>
   </div>
-</md-card>
+  <div class="row">
+    <div class="col-12">
+      <p class="form-control-plaintext">
+        Last edited by Debbie Liebenberg on 02/08/2017
+      </p>
+    </div>
+  </div>

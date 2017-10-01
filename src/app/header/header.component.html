@@ -1,18 +1,17 @@
-<nav class="navbar navbar-default" color="primary">
-    <div class="navbar-header">
-      <a routerLink = "/" class="navbar-brand">Q-Paper</a>
-      <button type="button" class="navbar-toggle collapsed" (click)="toggleNavMenu()">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
+<nav class="col navbar navbar-expand-sm navbar-dark bg-info">
+  <a routerLink = "/" class="navbar-brand">Q-Paper</a>
+  <button type="button" class="navbar-toggler" (click)="toggleNavMenu()">
+    <span class = "navbar-toggler-icon"></span>
+  </button>
 
-    <div class="collapse navbar-collapse" [ngClass]="{'in': !navMenuCollapsed}">
-      <ul class="nav navbar-nav">
-        <li routerLinkActive = "active" (click)="navMenuCollapsed = true"><a routerLink = "/papers">Papers</a></li>
-        <li routerLinkActive = "active" (click)="navMenuCollapsed = true"><a routerLink = "/questions">Questions</a></li>
-        <li routerLinkActive = "active" (click)="navMenuCollapsed = true"><a routerLink = "/admin">Admin</a></li>
-      </ul>
-    </div>
+  <div class="collapse navbar-collapse" [ngClass]="{'collapse': navMenuCollapsed}">
+    <ul class="navbar-nav">
+      <li class = "nav-item" routerLinkActive = "active" (click)="navMenuCollapsed = true">
+        <a class = "nav-link" routerLink = "/papers">Papers</a></li>
+      <li class = "nav-item" routerLinkActive = "active" (click)="navMenuCollapsed = true">
+        <a class = "nav-link" routerLink = "/questions">Questions</a></li>
+      <li class = "nav-item" routerLinkActive = "active" (click)="navMenuCollapsed = true">
+        <a class = "nav-link" routerLink = "/admin">Admin</a></li>
+    </ul>
+  </div>
 </nav>

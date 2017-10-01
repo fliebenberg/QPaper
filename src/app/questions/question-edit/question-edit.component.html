@@ -1,243 +1,275 @@
 <form [formGroup] = "questionEditForm" (ngSubmit)="formSubmit()">
-  <div fxLayout="row">
-    <h4
-      style="margin-top: 5px"
-      fxFlex
-    >
-      <md-input-container class="full-width">
-        <input
-        type="text" mdInput
-        placeholder="Description"
-        [(ngModel)] = "questionCopy.description"
-        formControlName = "description"
-        name="description"
+  <div class = "row">
+    <div class="col-12 pt-2">
+      <div class = "form-row form-group">
+        <label for="descriptionInput" class = "form-control-lg text-center text-sm-left col-12 col-sm-auto">Description</label>
+        <input type="text"
+          class = "form-control-lg col-12 col-sm"
+          placeholder = "Description"
+          [(ngModel)] = "questionCopy.description"
+          formControlName = "description" name="description" id = "descriptionInput"
         >
-      </md-input-container>
-    </h4>
+      </div>
+    </div>
   </div>
-  <div *ngIf = "questionCopy.description.length > 0">
-    <md-tab-group>
-      <md-tab label="Filter">
-        <h1></h1> 
-        <div fxLayout = "column" fxLayoutGap = "30px">
-          <div fxLayout = "column" fxLayoutGap = "10px">
-            <md-select
-              placeholder="Grade"
-              [(ngModel)] = "questionCopy.grade"
-              (change) = "onGradeSelectionChange()"
-              formControlName = "grade" name = "grade"
-              color="secondary"
-              fxFlex = "0 1 auto"
+  <div *ngIf = "questionCopy.description.length > 0" class = "row">
+    <nav class="nav nav-tabs" id="questionEditTabs">
+      <a class="nav-item nav-link" id="filterTab"
+        (click) = "onTabClick('filter')"
+        [ngClass] = "{'active': selectedTab == 'filter'}"
+      >Filter</a>
+      <a class="nav-item nav-link" id="questionTab"
+        (click) = "onTabClick('question')"
+        [ngClass] = "{'active': selectedTab == 'question'}"
+      >Question</a>
+      <a class="nav-item nav-link" id="answerTab"
+        (click) = "onTabClick('answer')"
+        [ngClass] = "{'active': selectedTab == 'answer'}"
+      >Answer</a>
+      <a class="nav-item nav-link" id="varsTab"
+        data-toggle="tab" role="tab"
+        (click) = "onTabClick('vars')"
+        [ngClass] = "{'active': selectedTab == 'vars'}"
+      >Vars<span class="text-danger">*</span></a>
+      <a class="nav-item nav-link" id="metaTab"
+        (click) = "onTabClick('meta')"
+        [ngClass] = "{'active': selectedTab == 'meta'}"
+      >Meta</a>
+    </nav>
+  </div>
+  <div class="tab-content" id="tabContent">
+    <div class="tab-pane form-row" id="filter-tab-content" [ngClass] = "{'active': selectedTab == 'filter'}">
+      <div class="form-row">
+        <div class="form-group col-12 col-md-6">
+          <label for="gradeSelector">Grade</label>
+          <select id="gradeSelector"
+            class="form-control"
+            placeholder="Grade"
+            [(ngModel)] = "questionCopy.grade"
+            (change) = "onGradeSelectionChange()"
+            formControlName = "grade" name = "grade"
+            color="secondary"
+          >
+            <option
+              *ngFor = "let grade of (questionsService.grades$ | async)"
+              value="{{grade}}"
+            >{{grade}}</option>
+            <option value = "***NEWGRADE">
+              New grade...
+            </option>
+          </select>
+          <div *ngIf = "addGrade" class="form-group">
+            <input type="text" class="form-control"
+              placeholder = "Enter new grade"
+              formControlName = "newGrade" name = "newGrade"
             >
-              <md-option
-                *ngFor = "let grade of (questionsService.grades$ | async)"
-                value="{{grade}}"
-              >{{grade}}</md-option>
-              <md-option value = "***NEWGRADE">
-                New grade...
-              </md-option>
-            </md-select>
-            <md-input-container *ngIf = "addGrade">
-              <input type="text" mdInput
-                placeholder = "Enter new grade"
-                formControlName = "newGrade" name = "newGrade"
-              >
-            </md-input-container>
-          </div>
-          <div fxLayout = "column" fxLayoutGap = "10px">
-            <md-select
-              *ngIf = "!addGrade"
-              placeholder="Subject"
-              [(ngModel)] = "questionCopy.subject"
-              (change) = "onSubjectSelectionChange()"
-              formControlName = "subject"
-              name = "subject"
-              color="secondary"
-              fxFlex
-              >
-                <md-option
-                  *ngFor = "let subject of (questionsService.subjects$ | async)"
-                  value="{{subject}}"
-                >{{subject}}</md-option>
-                <md-option value = "***NEWSUBJECT">
-                  New subject...
-                </md-option>
-            </md-select>
-            <md-input-container *ngIf = "addGrade || addSubject">
-              <input type="text" mdInput
-                placeholder = "Enter new subject"
-                formControlName = "newSubject" name = "newSubject"
-              >
-            </md-input-container>
-          </div>
-          <div fxLayout = "column" fxLayoutGap = "10px">
-            <md-select
-              *ngIf = "!(addGrade || addSubject)"
-              placeholder="Topic"
-              [(ngModel)] = "questionCopy.topic"
-              (change) = "onTopicSelectionChange()"
-              formControlName = "topic" name = "topic"
-              color="secondary"
-              fxFlex
-              >
-                <md-option
-                  *ngFor = "let topic of (questionsService.topics$ | async)"
-                  value="{{topic}}"
-                >{{topic}}</md-option>
-                <md-option value = "***NEWTOPIC">
-                  New topic...
-                </md-option>
-            </md-select>
-            <md-input-container *ngIf = "addGrade || addSubject || addTopic">
-              <input type="text" mdInput
-                placeholder = "Enter new topic"
-                formControlName = "newTopic" name = "newTopic"
-              >
-            </md-input-container>
-          </div>
-          <div fxLayout = "column" fxLayoutGap = "10px">
-            <md-select
-              *ngIf = "!(addGrade || addSubject || addTopic)"
-              placeholder="Category"
-              [(ngModel)] = "questionCopy.category"
-              (change) = "onCategorySelectionChange()"
-              formControlName = "category" name = "category"
-              color="secondary"
-              fxFlex
-              >
-                <md-option
-                  *ngFor = "let category of (questionsService.categories$ | async)"
-                  value="{{category}}"
-                >{{topic}}</md-option>
-                <md-option value = "***NEWCATEGORY">
-                  New category...
-                </md-option>
-            </md-select>
-            <md-input-container *ngIf = "addGrade || addSubject || addTopic || addCategory">
-              <input type="text" mdInput
-                placeholder = "Enter new category"
-                formControlName = "newCategory" name = "newCategory"
-              >
-            </md-input-container>
           </div>
         </div>
-      </md-tab>
-      <md-tab label="Question">
-        <md-input-container class="full-width">
-          <textarea color="primary"
-            mdInput minRows="1"
-            placeholder="Question"
-            rows="3"
-            [(ngModel)] = "questionCopy.questionText"
-            formControlName = "questionText"
-            name="questionText"
-          ></textarea>
-        </md-input-container>
-        <h6>Question Preview</h6>
-        <pre [innerHTML] = "questionCopy.questionText | render | safeHtml"></pre>
-      </md-tab>
-      <md-tab label="Answer">
-        <md-input-container class="full-width">
-          <!--took out md-autosize from textarea as it was making text disappear from 2nd tab  -->
-          <textarea
-            mdInput minRows="1"
-            placeholder="Answer"
-            rows="3"
-            [(ngModel)] = "questionCopy.answerText"
-            formControlName = "answerText"
-            name="answerText"
+        <div class="form-group col-12 col-md-6">
+          <label for="subjectSelector">Subject</label>
+          <select id="subjectSelector"
+            *ngIf = "!addGrade"
+            class="form-control"
+            placeholder="Subject"
+            [(ngModel)] = "questionCopy.subject"
+            (change) = "onSubjectSelectionChange()"
+            formControlName = "subject" name = "subject"
+            color="secondary"
             >
-          </textarea>
-        </md-input-container>
-        <h6>Answer Preview</h6>
-        <pre [innerHTML] = "questionCopy.answerText | render | safeHtml"></pre>
-      </md-tab>
-      <md-tab label="Vars">
-        <div fxLayout = "row">
-          <md-card fxFlex = "0 0 200px" fxLayout = "column">
-            <h4>Variables</h4>
-            <p *ngIf = "varsCopy.length == 0">No Variables</p>
-            <md-nav-list *ngIf = "varsCopy.length > 0">
-              <a
-              *ngFor = "let qVar of varsCopy; let i = index"
-              md-list-item
-              (click) = "onVarSelected(i)"
-              >{{selectedVar == i ? '>' + qVar.name + '<' : qVar.name}}</a>
-            </md-nav-list>
-            <button
-            type = "button" md-raised-button color = "primary"
+              <option
+                *ngFor = "let subject of (questionsService.subjects$ | async)"
+                value="{{subject}}"
+              >{{subject}}</option>
+              <option value = "***NEWSUBJECT">
+                New subject...
+              </option>
+          </select>
+          <div *ngIf = "addGrade || addSubject" class="form-group">
+            <input type="text" class="form-control"
+              placeholder = "Enter new subject"
+              formControlName = "newSubject" name = "newSubject"
+            >
+          </div>
+        </div>
+        <div class="form-group col-12 col-md-6">
+          <label for="topicSelector">Topic</label>
+          <select id="topicSelector"
+            *ngIf = "!(addGrade || addSubject)"
+            class="form-control"
+            placeholder="Topic"
+            [(ngModel)] = "questionCopy.topic"
+            (change) = "onTopicSelectionChange()"
+            formControlName = "topic" name = "topic"
+            color="secondary"
+            >
+              <option
+                *ngFor = "let topic of (questionsService.topics$ | async)"
+                value="{{topic}}"
+              >{{topic}}</option>
+              <option value = "***NEWTOPIC">
+                New topic...
+              </option>
+          </select>
+          <div *ngIf = "addGrade || addSubject || addTopic" class="form-group">
+            <input type="text" class="form-control"
+              placeholder = "Enter new topic"
+              formControlName = "newTopic" name = "newTopic"
+            >
+          </div>
+        </div>
+        <div class="form-group col-12 col-md-6">
+          <label for="categorySelector">Category</label>
+          <select id="categorySelector"
+            *ngIf = "!(addGrade || addSubject || addTopic)"
+            class = "form-control"
+            placeholder="Category"
+            [(ngModel)] = "questionCopy.category"
+            (change) = "onCategorySelectionChange()"
+            formControlName = "category" name = "category"
+            color="secondary"
+            >
+              <option
+                *ngFor = "let category of (questionsService.categories$ | async)"
+                value="{{category}}"
+              >{{category}}</option>
+              <option value = "***NEWCATEGORY">
+                New category...
+              </option>
+          </select>
+          <div *ngIf = "addGrade || addSubject || addTopic || addCategory" class="form-group">
+            <input type="text" class="form-control"
+              placeholder = "Enter new category"
+              formControlName = "newCategory" name = "newCategory"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane form-row" id="questionTabContent" [ngClass] = "{'active': selectedTab == 'question'}">
+      <div class="form-group col-12">
+        <label for="questionInput">Question Text</label>
+        <textarea id="questionInput"
+          class="form-control"
+          minRows="1"
+          placeholder="Question"
+          rows="3"
+          [(ngModel)] = "questionCopy.questionText"
+          formControlName = "questionText" name="questionText"
+        ></textarea>
+      </div>
+      <hr>
+      <div class="form-group">
+        <label for="questionPreview">Question Preview</label>
+        <pre id="questionPreview" class="bg-light" [innerHTML] = "questionCopy.questionText | render | safeHtml"></pre>
+      </div>
+    </div>
+    <div class="tab-pane form-row" id="answerTabContent" [ngClass] = "{'active': selectedTab == 'answer'}">
+      <div class="form-group col-12">
+        <label for="answerInput"></label>
+        <!--took out md-autosize from textarea as it was making text disappear from 2nd tab  -->
+        <textarea id="answerInput"
+          class="form-control"
+          minRows="1"
+          placeholder="Answer"
+          rows="3"
+          [(ngModel)] = "questionCopy.answerText"
+          formControlName = "answerText" name="answerText"
+        ></textarea>
+      </div>
+      <hr>
+      <label for="answerPreview">Answer Preview</label>
+      <pre id="answerPreview" class="bg-light" [innerHTML] = "questionCopy.answerText | render | safeHtml"></pre>
+    </div>
+    <div class="tab-pane form-row" id="varsTabContent" [ngClass] = "{'active': selectedTab == 'vars'}">
+      <div class="row">
+        <div class="card col-12 col-sm-3">
+          <h4>Variables</h4>
+          <p *ngIf = "varsCopy.length == 0">No Variables</p>
+          <nav *ngIf = "varsCopy.length > 0" class="nav list-group">
+            <a
+            *ngFor = "let qVar of varsCopy; let i = index"
+            class="nav-link list-group-item list-group-item-primary list-group-item-action"
+            [ngClass] = "{'active': selectedVar == i}"
+            (click) = "onVarSelected(i)"
+            >{{qVar.name}}</a>
+          </nav>
+          <button
+            type = "button"
+            class="btn btn-primary"
             (click) = "onNewVar()"
-            >NEW</button>
-          </md-card>
-          <md-card fxFlex = "1 1 auto">
-            <div *ngIf = "selectedVar > -1" formGroupName = "vars" fxLayout = "column">
-              <md-input-container>
-                <input
-                type="text" mdInput
+          >NEW</button>
+        </div>
+        <div class="card col-12 col-sm-9">
+          <div *ngIf = "selectedVar > -1" formGroupName = "vars">
+            <div class="form=group">
+              <label for="varNameInput">Variable Name</label>
+              <input id="varNameInput" type="text"
+                class="form-control"
                 placeholder="Variable Name"
-                formControlName = "name"
-                name="name"
-                >
-              </md-input-container>
-              <md-input-container>
-                <input
-                type="text" mdInput
+                formControlName = "name" name="name"
+              >
+            </div>
+            <div class="form-group">
+              <label for="varDefaultInput">Variable Default Value</label>
+              <input id="varDefaultInput" type="text"
+                class="form-control"
                 placeholder="Variable Default Value"
                 formControlName = "defaultVal"
                 name="defaultVal"
-                >
-              </md-input-container>
-              <md-input-container>
-                <input
-                type="text" mdInput
-                placeholder="Variable Specified Value"
-                formControlName = "specifiedVal"
-                name="specifiedVal"
-                >
-              </md-input-container>
-              <div fxLayout = "row" fxLayoutGap = "5px">
-                <button *ngIf = "questionEditForm.get('vars').dirty"
-                fxFlex = "1 1 auto"
-                md-raised-button color = "primary" type = "button"
-                (click) = "saveVarChanges()"
-                >SAVE CHANGES</button>
-                <button *ngIf = "questionEditForm.get('vars').dirty"
-                fxFlex = "1 1 auto"
-                md-raised-button color = "warn" type = "button"
-                (click) = "onVarSelected(selectedVar)"
-                >CANCEL CHANGES</button>
-                <button *ngIf = "!questionEditForm.get('vars').dirty"
-                fxFlex = "0 0 auto"
-                md-raised-button color = "warn" type = "button"
-                (click) = "onVarDelete()"
-                >DELETE VARIABLE</button>
-              </div>
+              >
             </div>
-          </md-card>
+            <div class="form-group">
+              <label for="varSpecifiedInput">Variable Specified Value</label>
+              <input id="varSpecifiedInput" type="text"
+              class="form-control"
+              placeholder="Variable Specified Value"
+              formControlName = "specifiedVal"
+              name="specifiedVal"
+              >
+            </div>
+            <div class="row justify-content-around">
+              <button type="button"
+                *ngIf = "questionEditForm.get('vars').dirty"
+                class="btn btn-outline-primary col-5"
+                (click) = "saveVarChanges()"
+              >SAVE CHANGES</button>
+              <button type="button"
+                *ngIf = "questionEditForm.get('vars').dirty"
+                class="btn btn-outline-warning col-5"
+                (click) = "onVarSelected(selectedVar)"
+              >CANCEL CHANGES</button>
+              <button type="button"
+                *ngIf = "!questionEditForm.get('vars').dirty"
+                class="btn btn-outline-danger col-11"
+                (click) = "onVarDelete()"
+              >DELETE VARIABLE</button>
+            </div>
+          </div>
         </div>
-      </md-tab>
-      <md-tab label="Meta">
-        <app-question-meta
-          [question] = "questionCopy"
-        ></app-question-meta>
-      </md-tab>
-    </md-tab-group>
+      </div>
+    </div>
+    <div class="tab-pane form-row" id="metaTabContent" [ngClass] = "{'active': selectedTab == 'meta'}">
+      <app-question-meta
+        class="col-12"
+        [question] = "questionCopy"
+      ></app-question-meta>
+    </div>
   </div>
-  <div style="height : 50px"></div>
-  <div fxLayout = "row" fxLayoutAlign = "end center" fxLayoutGap = "10px" class="action-bar">
-    <button
+  <hr class="mt-4">
+  <div id="actionBar" class="row justify-content-end">
+    <button type = "submit"
       *ngIf = "questionEditForm.dirty"
+      class="btn btn-outline-primary ml-2"
       [disabled] = "selectedVar > -1 && questionEditForm.get('vars').dirty"
-      md-raised-button color = "primary" type="submit"
     >SAVE</button>
-    <button
-      md-raised-button color = "warn" type="button"
+    <button type="button"
+    *ngIf = "questionEditForm.dirty"
+    class="btn btn-outline-warning ml-2"
+    (click) = "onReset()"
+    >RESET</button>
+    <button type="button"
+      class="btn btn-outline-danger ml-2"
       (click) = "onCancel()"
     >CANCEL</button>
-    <button
-      *ngIf = "questionEditForm.dirty"
-      md-raised-button color = "accent" type="button"
-      (click) = "onReset()"
-    >RESET</button>
   </div>
 </form>

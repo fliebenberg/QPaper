@@ -1,9 +1,9 @@
 <!-- <li class="row list-group-item"> -->
   <a
-    md-list-item class="no-wrap"
+    class= "list-group-item list-group-item-action list-group-item-primary"
     [routerLink] = "['/question',question.id]"
     (click) = "questionSelected()"
-    routerLinkActive = "active-link"
+    routerLinkActive = "active"
     >
     {{question.description}}
   </a>

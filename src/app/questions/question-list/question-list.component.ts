@@ -5,13 +5,14 @@ import { Observable } from "rxjs/Observable";
 import { MdListModule, MdButtonModule } from "@angular/material";
 
 import { Store } from "@ngrx/store";
+import { AppState } from "../../store/app.state";
 import { Question } from '../../store/question.model';
 import * as QActions from "../../store/questions.actions";
 import { QuestionsService } from '../questions.service';
 
-interface AppState {
-  questions: Question[];
-}
+// interface AppState {
+//   questions: Question[];
+// }
 
 @Component({
   selector: 'app-question-list',
@@ -20,7 +21,10 @@ interface AppState {
 })
 export class QuestionListComponent implements OnInit, OnDestroy {
   questions$: Observable<Question[]>;
-  // private myQuestionsChangedSub: Subscription;
+  gradeFilterValue: string = "ALL";
+  subjectFilterValue: string = "ALL";
+  topicFilterValue: string = "ALL";
+  categoryFilterValue: string = "ALL";
 
   constructor(
     private store: Store<AppState>,
@@ -36,14 +40,28 @@ export class QuestionListComponent implements OnInit, OnDestroy {
 
   onAddQuestion() {
     this.router.navigate(["/question", "NEW", "edit"]);
-    // this.questionsService.addQuestion(new Question('3', 'Grade6', 'Maths', 'More advanced maths','','Dificult math question', 'What is 100+100?', 'Answer is 200'));
-    // this.questionsService.addQuestion(
-    //   new Question('3', 'Grade6', 'Maths', 'More advanced maths','','Dificult math question', 'What is 100+100?', 'Answer is 200')
-    // )
   }
 
-  onDeleteQuestion() {
-    // this.questionsService.removeQuestion(0);
+  onGradeSelectionChange() {
+    if (this.gradeFilterValue !== "ALL") {
+      this.subjectFilterValue = "ALL"
+      this.topicFilterValue = "ALL"
+      this.categoryFilterValue = "ALL"
+
+    };
+  }
+
+  onSubjectSelectionChange() {
+    if (this.subjectFilterValue !== "ALL") {
+      this.topicFilterValue = "ALL"
+      this.categoryFilterValue = "ALL"
+    };
+  }
+
+  onTopicSelectionChange() {
+    if (this.topicFilterValue !== "ALL") {
+      this.categoryFilterValue = "ALL"
+    };
   }
 
   ngOnDestroy() {

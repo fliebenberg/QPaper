@@ -31,6 +31,12 @@ import { questionsReducer } from "./store/questions.reducer";
 import { selectedQuestionReducer } from "./store/selected-question.reducer";
 import { QuestionMetaComponent } from './questions/question-meta/question-meta.component';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
+import { QuestionFilterPipe } from './shared/questionfilter.pipe';
+import { GradeFilterPipe } from './shared/filter-pipes/grade-filter.pipe';
+import { SubjectFilterPipe } from './shared/filter-pipes/subject-filter.pipe';
+import { TopicFilterPipe } from './shared/filter-pipes/topic-filter.pipe';
+import { CategoryFilterPipe } from './shared/filter-pipes/category-filter.pipe';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +56,12 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.c
     SubjectSelectorComponent,
     QuestionMetaComponent,
     ConfirmDialogComponent,
+    QuestionFilterPipe,
+    SubjectFilterPipe,
+    GradeFilterPipe,
+    TopicFilterPipe,
+    CategoryFilterPipe,
+    HomeComponent,
   ],
   imports: [
     AppRoutingModule,

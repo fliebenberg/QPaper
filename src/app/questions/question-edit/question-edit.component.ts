@@ -7,6 +7,7 @@ import { Subscription } from "rxjs/subscription";
 import { Question } from "../../store/question.model";
 import { QuestionVar } from "../../store/question-var.model";
 import { QuestionsService } from "../questions.service";
+import { QuestionFilterPipe } from "../../shared/questionfilter.pipe";
 import { ConfirmDialogComponent } from "../../shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
@@ -20,6 +21,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
   questionCopy : Question;
   varsCopy : QuestionVar[];
   selectedVar : number;
+  selectedTab : string = "filter";
   varsDirty : boolean = false;
   addGrade : boolean = false;
   addSubject : boolean = false;
@@ -81,6 +83,10 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     if (this.selectedVar > -1) {
       this.createVarForm();
     }
+    this.addGrade = false;
+    this.addSubject = false;
+    this.addTopic = false;
+    this.addCategory = false;
     console.log(this.questionEditForm);
   }
 
@@ -96,8 +102,16 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     } else {
       this.questionCopy.subject = this.questionEditForm.value.subject;
     }
-    this.questionCopy.topic = this.questionEditForm.value.topic;
-    this.questionCopy.category = this.questionEditForm.value.category;
+    if (this.addGrade || this.addSubject || this.addTopic) {
+      this.questionCopy.topic = this.questionEditForm.value.newTopic;
+    } else {
+      this.questionCopy.topic = this.questionEditForm.value.topic;
+    }
+    if (this.addGrade || this.addSubject || this.addTopic || this.addCategory) {
+      this.questionCopy.category = this.questionEditForm.value.newCategory;
+    } else {
+      this.questionCopy.category = this.questionEditForm.value.category;
+    }
     this.questionCopy.questionText = this.questionEditForm.value.questionText;
     this.questionCopy.answerText = this.questionEditForm.value.answerText;
     this.questionCopy.vars = [...this.varsCopy];
@@ -132,6 +146,9 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       this.addGrade = true;
     } else {
       this.addGrade = false;
+      this.questionCopy.subject = "";
+      this.questionCopy.topic = "";
+      this.questionCopy.category = "";
     }
   }
 
@@ -141,6 +158,8 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       this.addSubject = true;
     } else {
       this.addSubject = false;
+      this.questionCopy.topic = "";
+      this.questionCopy.category = "";
     }
   }
 
@@ -150,6 +169,7 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
       this.addTopic = true;
     } else {
       this.addTopic = false;
+      this.questionCopy.category = "";
     }
   }
 
@@ -160,6 +180,10 @@ export class QuestionEditComponent implements OnInit, OnDestroy {
     } else {
       this.addCategory = false;
     }
+  }
+
+  onTabClick(selectedTab : string) {
+    this.selectedTab = selectedTab;
   }
 
   onNewVar(){

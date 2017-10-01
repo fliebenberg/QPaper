@@ -9,9 +9,14 @@ import { QuestionListComponent } from "./questions/question-list/question-list.c
 import { QuestionViewComponent } from "./questions/question-view/question-view.component";
 import { AdminComponent } from "./admin/admin.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
+import { HomeComponent } from "./home/home.component";
 
 const AppRoutes: Routes = [
-  {path: "", redirectTo: "questions", pathMatch: "full"},
+  {path: "",
+    // redirectTo: "questions",
+    pathMatch: "full",
+    component: HomeComponent
+  },
   {path: "papers", component: PapersComponent},
   {path: "questions", component: QuestionsComponent},
   {path: "question/:id",

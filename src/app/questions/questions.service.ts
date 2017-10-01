@@ -51,7 +51,7 @@ export class QuestionsService implements OnInit, OnDestroy {
         return questions.map((question: Question) => {
           return question.grade
         }).reduce((gradesArray : string[], grade: string) => {
-          if (gradesArray.indexOf(grade) == -1) {
+          if (grade !== "" && gradesArray.indexOf(grade) == -1) {
             gradesArray.push(grade);
           }
           return gradesArray;
@@ -63,7 +63,7 @@ export class QuestionsService implements OnInit, OnDestroy {
         return questions.map((question: Question) => {
           return question.subject
         }).reduce((subjectsArray : string[], subject: string) => {
-          if (subjectsArray.indexOf(subject) == -1) {
+          if (subject !== "" && subjectsArray.indexOf(subject) == -1) {
             subjectsArray.push(subject);
           }
           return subjectsArray;
@@ -75,7 +75,7 @@ export class QuestionsService implements OnInit, OnDestroy {
         return questions.map((question: Question) => {
           return question.topic
         }).reduce((topicsArray : string[], topic: string) => {
-          if (topicsArray.indexOf(topic) == -1) {
+          if (topic !== "" && topicsArray.indexOf(topic) == -1) {
             topicsArray.push(topic);
           }
           return topicsArray;
@@ -87,9 +87,11 @@ export class QuestionsService implements OnInit, OnDestroy {
         return questions.map((question: Question) => {
           return question.category
         }).reduce((categoriesArray : string[], category: string) => {
-          if (categoriesArray.indexOf(category) == -1) {
+          if (category !== "" && categoriesArray.indexOf(category) == -1) {
             categoriesArray.push(category);
           }
+          console.log("cats:");
+          console.log(categoriesArray);
           return categoriesArray;
         }, []).sort();
       });
@@ -107,7 +109,7 @@ export class QuestionsService implements OnInit, OnDestroy {
       ])
     );
     this.addQuestion(new Question('2', 'Grade 1', 'English', 'Basic English','','First English question', 'What is a {verb}?', 'A verb is a \'do\' word.'));
-    this.addQuestion(new Question('3', 'Grade 4', 'Geography', 'Advanced Geography','','This is a much longer geography question', 'What was the ancient capital of Thailand called?', 'Suhkothai'));
+    this.addQuestion(new Question('3', 'Grade 4', 'Geography', 'Advanced Geography','Africa','This is a much longer geography question', 'What was the ancient capital of Thailand called?', 'Suhkothai'));
     console.log("Questions loaded");
     console.log(this.getQuestionSnapshot("2"));
   }
